@@ -23,7 +23,8 @@ Page( {
     const width = systemInfo.windowWidth
     this.setData( {
       minHeight: 120 / 750 * width,
-      maxHeight: 780 / 750 * width
+      maxHeight: 780 / 750 * width,
+      width
     } )
   },
 
@@ -40,6 +41,7 @@ Page( {
             imagePath: res,
             showPanel: true
           }, () => {
+            this.createBtnFade()
             setTimeout( () => {
               this.selectComponent( '#card' ).startAnalyse()
             }, 1500 )
@@ -61,6 +63,25 @@ Page( {
     } else {
       this.showPanel()
     }
+  },
+
+  createBtnFade () {
+    var animation = wx.createAnimation( {
+      duration: 1300,
+      timingFunction: "ease-in",
+      delay: 0
+    } );
+    this.animation = animation;
+    animation.opacity(0).step();
+    this.setData( {
+      animationData: animation.export()
+    } )
+    setTimeout( () => {
+      animation.opacity(1).step();
+      this.setData( {
+        animationData: animation
+      } )
+    }, 1300 )
   },
 
   showPanel ( e ) {
@@ -110,6 +131,6 @@ Page( {
   setField ( e ) {
     let name = e.currentTarget.dataset.name;
     console.log( e.detail.value )
-    this.setData({[name]: e.detail.value})
+    this.setData( { [name]: e.detail.value } )
   },
 } )

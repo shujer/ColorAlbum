@@ -69,6 +69,7 @@
     -moz-transform: translateY(780rpx);
     -ms-transform: translateY(780rpx);
     -o-transform: translateY(780rpx);
+    opacity: 0;
 }
 
 .panel-content {

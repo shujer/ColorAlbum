@@ -7,7 +7,7 @@
     <view class="create-btn" bind:tap="chooseImage" wx:if="{{!showPanel}}">
         <view class="iconfont icon-uploadphoto1"></view>
     </view>
-    <cover-view animation="{{animationData}}" class="control-panel" wx:if="{{showPanel}}">
+    <cover-view animation="{{animationData}}" class="control-panel">
         <cover-view class="panel-content">
             <cover-view class="section">
                 <cover-view class="section--title choose-text" bind:tap="chooseImage">
