@@ -1,0 +1,53 @@
+/* miniprogram/pages/tabar/home/index.wxss */
+
+.album-container, swiper {
+    width: 100%;
+    height: 100vh;
+}
+
+.alternate-content {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(
+        closest-side circle,
+        rgba(255, 255, 255, .5) 0%, 
+        rgba(255, 255, 255, .4) 50%, 
+        rgba(255, 255, 255, 0) 80%);
+}
+
+.album {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 200rpx;
+    background-position: center center;
+    background-size: cover;
+}
+
+.album .title {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.chevron-leave-active {
+    animation: 1000ms chevron-leave forwards ease-out;
+    -webkit-animation: 1000ms chevron-leave forwards ease-out;
+}
+
+@keyframes chevron-leave {
+    0% {
+        clip-path: polygon(100% 0, 100% 50%, 100% 100%, 0 100%, 0 50%, 0% 0%);
+    }
+
+    30% {
+        clip-path: polygon(100% 0, 75% 50%, 100% 100%, 25% 100%, 0% 50%, 25% 0);
+    }
+
+    100% {
+        clip-path: polygon(0% 0%, -25% 50%, 0% 100%, -75% 100%, -100% 50%, -75% 0);
+    }
+}

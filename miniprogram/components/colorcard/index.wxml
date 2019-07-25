@@ -1,0 +1,2 @@
+<!-- components/colorcard/index.wxml -->
+<canvas class="cardCanvas" canvas-id="myCanvas" style="height: {{height}}px; width: {{width}}px;" />

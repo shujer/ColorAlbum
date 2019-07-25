@@ -1,0 +1,11 @@
+<!-- index.wxml -->
+<view class="container">
+  <!-- logo -->
+  <view class="logo">C</view>
+  <!-- info -->
+  <view class="motto">{{motto}}</view>
+  <!-- login -->
+  <button class="login-btn" wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">
+    使用微信账号登录
+  </button>
+</view>

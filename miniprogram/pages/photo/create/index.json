@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "color-card": "../../../components/colorcard/index",
+    "cover-input": "../../../components/coverinput/index"
+  }
+}

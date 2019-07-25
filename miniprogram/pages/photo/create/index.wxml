@@ -1,0 +1,64 @@
+<!-- miniprogram/pages/photo/create/index.wxml -->
+<view class="container">
+    <scroll-view scroll-y="{{true}}" class="draw-container">
+        <color-card id="card" imagePath="{{imagePath}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
+        <view class="placehoder"></view>
+    </scroll-view>
+    <view class="create-btn" bind:tap="chooseImage" wx:if="{{!showPanel}}">
+        <view class="iconfont icon-uploadphoto1"></view>
+    </view>
+    <cover-view animation="{{animationData}}" class="control-panel" wx:if="{{showPanel}}">
+        <cover-view class="panel-content">
+            <cover-view class="section">
+                <cover-view class="section--title choose-text" bind:tap="chooseImage">
+                    重新选择图片
+                </cover-view>
+            </cover-view>
+            <cover-view class="section">
+                <cover-view class="section--title">标题</cover-view>
+                <cover-view class="section--body">
+                    <cover-input
+                        data-name="title"  
+                        name="Title" 
+                        value="{{title}}"
+                        bind:setTitle="setField">
+                    </cover-input>
+                </cover-view>
+            </cover-view>
+            <cover-view class="section">
+                <cover-view class="section--title">描述</cover-view>
+                <cover-view class="section--body">
+                    <cover-input
+                        data-name="description" 
+                        name="Description" 
+                        value="{{description}}" 
+                        bind:setDescription="setField">
+                    </cover-input>
+                </cover-view>
+            </cover-view>
+            <cover-view class="section">
+                <cover-view class="section--title">轮廓宽度</cover-view>
+                <cover-view class="section--body">{{description}}</cover-view>
+            </cover-view>
+            <cover-view class="section">
+                <cover-view class="section--title">轮廓颜色</cover-view>
+                <cover-view class="section--body">{{description}}</cover-view>
+            </cover-view>
+            <cover-view class="section">
+                <cover-view class="section--title">色块数目</cover-view>
+                <cover-view class="section--body">{{description}}</cover-view>
+            </cover-view>
+            <cover-view class="section">
+                <cover-view class="section--title">颜色代码</cover-view>
+                <cover-view class="section--body">{{description}}</cover-view>
+            </cover-view>
+            <cover-view class="section">
+                <cover-view class="section--title">相册</cover-view>
+                <cover-view class="section--body">{{description}}</cover-view>
+            </cover-view>
+        </cover-view>
+        <cover-view class="border-control" bind:tap="editPhoto" data-status="{{openStatus}}">
+            <cover-image src="../../../assets/icons/edit.png" class="edit-icon"></cover-image>
+        </cover-view>
+    </cover-view>
+</view>

@@ -1,0 +1,21 @@
+<!-- miniprogram/pages/tabar/home/index.wxml -->
+<view class="container {{animationClass}}">
+    <view class="alternate-content" wx:if="{{albums.length === 0}}" bind:tap="toCreate">
+        <text>这里空空如也</text>
+        <text>快来开始你的第一个创作吧</text>
+    </view>
+    <view class="album-container" wx:else>
+        <swiper autoplay="{{true}}">
+            <block wx:for="{{albums}}" wx:key="{{item._id}}">
+                <swiper-item bind:tap="toAlbum" data-id="{{item._id}}">
+                    <view class="album" style="background-color: {{item.color}}; background-image: url({{item.coverImage.tempFileURL}})">
+                        <text class="title">{{item.title}}</text>
+                    </view>
+                </swiper-item>
+            </block>
+        </swiper>
+    </view>
+    <view class="create-btn" bind:tap="toCreate" wx:if="{{!showPanel}}">
+        <view class="iconfont icon-uploadphoto1"></view>
+    </view>
+</view>

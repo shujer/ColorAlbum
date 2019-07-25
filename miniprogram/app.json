@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/tabar/home/index",
+    "pages/tabar/my/index",
+    "pages/tabar/mood/index",
+    "pages/photo/create/index",
+    "pages/photo/show/index",
+    "pages/photo/edit/index",
+    "pages/album/create/index",
+    "pages/album/edit/index",
+    "pages/album/show/index"
+  ],
+  "window": {
+    "backgroundColor": "#9F8BE5",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#9F8BE5",
+    "navigationBarTitleText": "采色",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#dbdbdb",
+    "selectedColor": "#9F8BE5",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "pagePath": "pages/tabar/mood/index",
+        "text": "心情",
+        "iconPath": "./assets/icons/mood.png",
+        "selectedIconPath": "./assets/icons/mood_selected.png"
+      },
+      {
+        "pagePath": "pages/tabar/home/index",
+        "text": "创作",
+        "iconPath": "./assets/icons/upload.png",
+        "selectedIconPath": "./assets/icons/upload_selected.png"
+      },
+      {
+        "pagePath": "pages/tabar/my/index",
+        "text": "我的",
+        "iconPath": "./assets/icons/my.png",
+        "selectedIconPath": "./assets/icons/my_selected.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

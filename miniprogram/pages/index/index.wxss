@@ -1,0 +1,32 @@
+@import "../../style/fontfamily.wxss";
+/**index.wxss**/
+.container {
+  padding-top: 180rpx;
+} 
+
+.logo {
+  font-family: 'Monoton', cursive;
+  text-align: center;
+  line-height: 500rpx;
+  width: 600rpx;
+  height: 500rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+  font-size: 500rpx;
+  color: #FBE864;
+}
+
+
+.login-btn {
+  margin-top: 40rpx;
+  outline: none;
+  font-size: 14px;
+  background-color: #FBE864;
+  color: #9F8BE5;
+}
+
+.motto {
+  margin-top: 40rpx;
+  color: #FBE864;
+  font-size: 17px;
+}
