@@ -1,0 +1,6 @@
+<!-- components/coverinput/index.wxml -->
+<!-- 借鉴解决方案 https://github.com/DevilLittle/applet_map_components/blob/master/cover_input/cover_input.wxss -->
+<cover-view class="cover-input">
+    <cover-view class='text' bindtap="tapInput">{{value}}</cover-view>
+    <input class='input' value="{{value}}" focus="{{inputFocus}}" bindblur="blurInput" style="{{style}}"></input>
+</cover-view>
