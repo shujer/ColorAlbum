@@ -137,3 +137,29 @@
     align-items: center;
     padding-right: 24rpx;
 }
+
+.save-control {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.save-btn {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #9F8BE5;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.save-btn .icon {
+    width: 50rpx;
+    height: 50rpx;
+}

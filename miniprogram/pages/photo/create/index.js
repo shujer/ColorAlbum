@@ -1,5 +1,6 @@
 // miniprogram/pages/photo/create/index.js
 const imageApi = require( '../../../api/image' )
+const photoApi = require( '../../../api/photo' )
 const app = getApp()
 
 Page( {
@@ -33,10 +34,10 @@ Page( {
         break;
       }
     }
-    if(album) {
-      this.setData({album, hasAlbum: true})
+    if ( album ) {
+      this.setData( { album, hasAlbum: true } )
     } else {
-      this.setData({hasAlbum: false})
+      this.setData( { hasAlbum: false } )
     }
   },
 
@@ -163,9 +164,75 @@ Page( {
     this.setData( { [name]: e.detail.value } )
   },
 
-  toAlbumSelect() {
-    wx.navigateTo({
+  toAlbumSelect () {
+    wx.navigateTo( {
       url: '../../album/select/index'
-    });
+    } );
+  },
+
+  savePhoto () {
+    if ( !this.data.imagePath ) {
+      wx.showToast( { title: '请先选择图片', icon: 'none' } )
+      return;
+    }
+    if ( !this.data.album ) {
+      wx.showToast( { title: '请先选择相册', icon: 'none' } )
+      return;
+    }
+    wx.showLoading( {
+      title: '创建中',
+      mask: true
+    } );
+    let {
+      title,
+      description,
+      album: { _id: albumID },
+      borderWidth,
+      borderColor,
+      num,
+      colorCodeStyle,
+      palettes } = this.data
+
+    imageApi.uploadImage( this.data.imagePath ).then( res => {
+      console.log( res )
+      photoApi.addPhoto(
+        {
+          title,
+          description,
+          albumID,
+          fileID: res.fileID,
+          photoSettings: {
+            borderWidth,
+            borderColor,
+            num,
+            colorCodeStyle
+          },
+          palettes
+        }
+      ).then( res => {
+        wx.hideLoading();
+        setTimeout( () => {
+          wx.showToast( {
+            title: '创建成功',
+            mask: true,
+            duration: 1600,
+            success: () => {
+              wx.redirectTo( {
+                url: `../show/index?id=${res._id}`
+              } )
+            }
+          } )
+        } )
+      } ).catch( err => {
+        wx.showToast( {
+          title: '创建失败'
+        } )
+      } )
+    } ).catch( err => {
+      wx.showToast( {
+        title: '创建失败'
+      } )
+    } )
+
   }
 } )

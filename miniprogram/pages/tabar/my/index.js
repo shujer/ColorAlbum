@@ -50,7 +50,7 @@ Page( {
       .then( photos => {
         let fileList = []
         photos = photos.map( ( photo, index ) => {
-          fileList.push( photo.card.imageInfo )
+          fileList.push( {fileID: photo.fileID })
           return { ...photo, color: genColor( index ) };
         } )
         let tempList = this.data.photos

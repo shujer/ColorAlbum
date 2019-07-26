@@ -58,6 +58,11 @@
                     </cover-view>
                 </cover-view>
             </cover-view>
+            <cover-view class="save-control">
+                <cover-view class="save-btn" bind:tap="savePhoto">
+                    <cover-image class="save-icon icon" src="../../../assets/icons/save_white.png"></cover-image>
+                </cover-view>
+            </cover-view>
         </cover-view>
         <cover-view class="border-control" bind:tap="editPhoto" data-status="{{openStatus}}">
             <cover-image wx:if="{{!openStatus}}" src="../../../assets/icons/edit.png" class="edit-icon icon"></cover-image>

@@ -2,16 +2,10 @@ const app = getApp();
 const db = wx.cloud.database();
 const { transferArrayToObj } = require( '../utils/transfer' );
 
-function addPhoto ( { title = '', description = '', albumID, fileID, photoSettings = {} } ) {
+function addPhoto ( data ) {
     return new Promise( ( resolve, reject ) => {
         db.collection( 'photo' ).add( {
-            data: {
-                title,
-                description,
-                albumID,
-                fileID,
-                photoSettings
-            }
+            data
         } ).then( res => {
             let { _id } = res;
             app.globalData.photos[_id] = data;
