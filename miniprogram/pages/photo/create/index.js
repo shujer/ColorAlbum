@@ -15,7 +15,8 @@ Page( {
     borderWidth: 0,
     borderColor: '#fff',
     num: 10,
-    colorCodeStyle: 'hex'
+    colorCodeStyle: 'hex',
+    palettes: []
   },
 
   onLoad () {
@@ -26,6 +27,11 @@ Page( {
       maxHeight: 780 / 750 * width,
       width
     } )
+  },
+
+  generatePalettes() {
+    this.hidePanel();
+    this.selectComponent( '#card' ).startAnalyse()
   },
 
   chooseImage: function () {
@@ -44,7 +50,7 @@ Page( {
             this.createBtnFade()
             setTimeout( () => {
               this.selectComponent( '#card' ).startAnalyse()
-            }, 1500 )
+            }, 1600 )
           } )
         }
       } );
@@ -85,6 +91,7 @@ Page( {
   },
 
   showPanel ( e ) {
+    if(!this.data.showPanel) return;
     var animation = wx.createAnimation( {
       duration: 250,
       timingFunction: "ease-out",
@@ -107,6 +114,7 @@ Page( {
   },
 
   hidePanel () {
+    if(!this.data.showPanel) return;
     var animation = wx.createAnimation( {
       duration: 250,
       timingFunction: "ease-out",
@@ -133,4 +141,5 @@ Page( {
     console.log( e.detail.value )
     this.setData( { [name]: e.detail.value } )
   },
+
 } )

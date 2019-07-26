@@ -1,1 +1,62 @@
 /* miniprogram/pages/tabar/my/index.wxss */
+.container {
+    padding: 22rpx 22rpx 120rpx 22rpx;
+}
+
+.swiper {
+    width: 100%;
+    height: 320rpx;
+}
+
+.swiper-item,
+.slide {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center center;
+}
+
+.photowall {
+    width: 100%;
+    margin-top: 22rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: space-around;
+    flex-wrap: wrap;
+}
+
+.tile {
+    width: 345rpx;
+    height: 345rpx;
+    margin-bottom: 21rpx;
+    background-color: #FBE864;
+    background-position: center center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.alternate {
+    width: 700rpx;
+    height: 400rpx;
+    margin-top: 100rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.btn-create {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 220rpx;
+    height: 220rpx;
+    background: radial-gradient(closest-side circle,
+        rgba(255, 255, 255, .5) 0%,
+        rgba(255, 255, 255, .6) 60%,
+        rgba(255, 255, 255, 0) 100%);
+}

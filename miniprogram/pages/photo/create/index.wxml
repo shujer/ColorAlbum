@@ -1,8 +1,17 @@
 <!-- miniprogram/pages/photo/create/index.wxml -->
 <view class="container">
     <scroll-view scroll-y="{{true}}" class="draw-container">
-        <color-card id="card" imagePath="{{imagePath}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
-        <view class="placehoder"></view>
+        <color-card 
+            data-name="palettes"
+            bind:setPalettes="setField"
+            id="card" 
+            imagePath="{{imagePath}}" 
+            palettes="{{palettes}}" 
+            borderWidth="{{borderWidth}}" 
+            borderColor="{{borderColor}}" 
+            num="{{num}}" 
+            colorCodeStyle="{{colorCodeStyle}}"></color-card>
+        <view class="placehoder">长按图片可保存到本地</view>
     </scroll-view>
     <view class="create-btn" bind:tap="chooseImage" wx:if="{{!showPanel}}">
         <view class="iconfont icon-uploadphoto1"></view>
@@ -10,43 +19,35 @@
     <cover-view animation="{{animationData}}" class="control-panel">
         <cover-view class="panel-content">
             <cover-view class="section">
-                <cover-view class="section--title choose-text" bind:tap="chooseImage">
-                    重新选择图片
+                <cover-view class="section--title" bind:tap="chooseImage">重新选择图片</cover-view>
+                <cover-view class="section--body">
+                    <cover-view bind:tap="generatePalettes">重新生成</cover-view>
+                    <cover-image class="rechoose-icon icon" src="../../../assets/icons/restart.png"></cover-image>
                 </cover-view>
             </cover-view>
             <cover-view class="section">
                 <cover-view class="section--title">标题</cover-view>
                 <cover-view class="section--body">
-                    <cover-input
-                        data-name="title"  
-                        name="Title" 
-                        value="{{title}}"
-                        bind:setTitle="setField">
-                    </cover-input>
+                    <cover-input data-name="title" name="Title" value="{{title}}" bind:setTitle="setField"></cover-input>
                 </cover-view>
             </cover-view>
             <cover-view class="section">
                 <cover-view class="section--title">描述</cover-view>
                 <cover-view class="section--body">
-                    <cover-input
-                        data-name="description" 
-                        name="Description" 
-                        value="{{description}}" 
-                        bind:setDescription="setField">
-                    </cover-input>
+                    <cover-input data-name="description" name="Description" value="{{description}}" bind:setDescription="setField"></cover-input>
                 </cover-view>
             </cover-view>
             <cover-view class="section">
                 <cover-view class="section--title">轮廓宽度</cover-view>
-                <cover-view class="section--body">{{description}}</cover-view>
-            </cover-view>
-            <cover-view class="section">
-                <cover-view class="section--title">轮廓颜色</cover-view>
-                <cover-view class="section--body">{{description}}</cover-view>
+                <cover-view class="section--body">
+                    <cover-slider data-name="borderWidth" name="BorderWidth" value="{{borderWidth}}" bind:setBorderWidth="setField" blockSize="{{18}}" min="{{0}}" max="{{30}}"></cover-slider>
+                </cover-view>
             </cover-view>
             <cover-view class="section">
                 <cover-view class="section--title">色块数目</cover-view>
-                <cover-view class="section--body">{{description}}</cover-view>
+                <cover-view class="section--body">
+                    <cover-slider data-name="num" name="Num" value="{{num}}" bind:setNum="setField" blockSize="{{18}}" min="{{1}}" max="{{16}}"></cover-slider>
+                </cover-view>
             </cover-view>
             <cover-view class="section">
                 <cover-view class="section--title">颜色代码</cover-view>
@@ -58,7 +59,8 @@
             </cover-view>
         </cover-view>
         <cover-view class="border-control" bind:tap="editPhoto" data-status="{{openStatus}}">
-            <cover-image src="../../../assets/icons/edit.png" class="edit-icon"></cover-image>
+            <cover-image wx:if="{{!openStatus}}" src="../../../assets/icons/edit.png" class="edit-icon icon"></cover-image>
+            <cover-image wx:if="{{openStatus}}" src="../../../assets/icons/delete.png" class="delete-icon icon"></cover-image>
         </cover-view>
     </cover-view>
 </view>

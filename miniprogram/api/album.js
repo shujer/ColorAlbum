@@ -1,10 +1,10 @@
 const app = getApp();
 const db = wx.cloud.database();
-const { transferArrayToObj } = require( '../utils/transfer' );
+const { transferArrayToObj, transferObjToArray } = require( '../utils/transfer' );
 
 function addAlbum ( { title = '默认', description = '', isPrivate = '', coverImage = 'none' } ) {
     return new Promise( ( resolve, reject ) => {
-        db.collection( 'album' ).add( { 
+        db.collection( 'album' ).add( {
             data: {
                 title,
                 description,
@@ -19,11 +19,11 @@ function addAlbum ( { title = '默认', description = '', isPrivate = '', coverI
             } catch ( error ) {
                 console.error( '[setStorageSync] [album] 调用失败', err );
             }
-            resolve(res);
-        } ).catch(err => {
-            console.error('[数据库][add]调用失败', err);
-            reject(err);
-        })
+            resolve( res );
+        } ).catch( err => {
+            console.error( '[数据库][add]调用失败', err );
+            reject( err );
+        } )
     } )
 }
 
@@ -36,28 +36,28 @@ function deleteAlbum ( id ) {
             } catch ( error ) {
                 console.error( '[setStorageSync] [album] 调用失败', err );
             }
-            resolve(res);
-        } ).catch(err => {
-            console.error('[数据库][remove]调用失败', err);
-            reject(err);
-        })
+            resolve( res );
+        } ).catch( err => {
+            console.error( '[数据库][remove]调用失败', err );
+            reject( err );
+        } )
     } )
 }
 
 function editAlbum ( id, data ) {
     return new Promise( ( resolve, reject ) => {
         db.collection( 'album' ).doc( id ).update( { data } ).then( res => {
-            app.globalData.albums[id] = {...app.globalData.albums[id], ...data};
+            app.globalData.albums[id] = { ...app.globalData.albums[id], ...data };
             try {
                 wx.setStorageSync( 'album', app.globalData.albums );
             } catch ( error ) {
                 console.error( '[setStorageSync] [album] 调用失败', err );
             }
-            resolve(res);
-        } ).catch(err => {
-            console.error('[数据库][add]调用失败', err);
-            reject(err);
-        })
+            resolve( res );
+        } ).catch( err => {
+            console.error( '[数据库][add]调用失败', err );
+            reject( err );
+        } )
     } )
 }
 
@@ -65,8 +65,8 @@ function getAlbumsByUser ( openid ) {
     return new Promise( ( resolve, reject ) => {
         // get data form memory 
         if ( app.globalData.albums ) {
-
-            resolve( app.globalData.albums );
+            let albums = transferObjToArray( app.globalData.albums )
+            resolve( albums );
 
         } else {
             app.globalData.albums = {}
@@ -74,23 +74,23 @@ function getAlbumsByUser ( openid ) {
             wx.getStorage( {
                 key: 'album',
                 success: res => {
-                    console.log(res)
+                    console.log( res )
                     app.globalData.albums = res.data;
-                    resolve( res.data )
+                    resolve( transferObjToArray( res.data ) )
                 },
                 fail: err => {
                     console.error( '[getAlbum][getStorage]失败', err )
                     db.collection( 'album' )
                         .where( { _openid: openid } )
                         .get().then( ( { data } ) => {
-                            let albums = transferArrayToObj('_id', data );
+                            let albums = transferArrayToObj( '_id', data );
                             app.globalData.albums = albums;
                             try {
                                 wx.setStorageSync( 'album', albums );
                             } catch ( e ) {
                                 console.error( '[setStorageSync] [album] 调用失败', err )
                             }
-                            resolve( albums );
+                            resolve( data );
                         } ).catch( err => {
                             console.error( '[数据库] [get] 调用失败', err )
                             reject( err )

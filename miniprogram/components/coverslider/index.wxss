@@ -1,0 +1,39 @@
+/* components/coverslider/index.wxss */
+.slider,
+.slider-inner,
+.selected-bar {
+    display: block;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.slider {
+    width: 100%;
+    position: relative;
+    height: 28px;
+}
+
+.slider-inner {
+    width: 100%;
+    position: absolute;
+    height: 50%;
+    transform: translateY(50%);
+    -webkit-transform: translateY(50%);
+    -moz-transform: translateY(50%);
+    -ms-transform: translateY(50%);
+    -o-transform: translateY(50%);
+}
+
+.slider-inner .selected-bar {
+    height: 100%;
+}
+
+.handler {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: 0 0 1px lightgray;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}

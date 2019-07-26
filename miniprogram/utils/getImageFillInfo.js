@@ -35,6 +35,10 @@ function getImageFillInfo ( type, info, dx = 0, dy = 0, tWidth, tHeight ) {
       sy = info.height > sh ? ( info.height - sh ) / 2 : 0
       break
     default:
+        rw = info.width / tWidth
+        dh = info.height / rw
+        sw = info.width
+        sh = info.height
       break
   }
   return { dx, dy, dw, dh, sx, sy, sw, sh }

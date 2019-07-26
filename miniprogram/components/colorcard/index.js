@@ -12,11 +12,13 @@ Component( {
       type: String,
       value: null,
       observer: function ( newImagePath ) {
-        if(!newImagePath) return;
+        if ( !newImagePath ) return;
         wx.getImageInfo( {
           src: newImagePath,
           success: info => {
+
             this.setData( { info, palettes: [] }, () => this.draw() )
+
           },
           fail: err => {
             console.log( '获取图片信息失败', err )
@@ -28,8 +30,8 @@ Component( {
     palettes: {
       type: Array,
       value: [],
-      observer: function ( ) {
-        if(!this.data.imagePath) {
+      observer: function () {
+        if ( !this.data.imagePath ) {
           return;
         } else {
           this.draw()
@@ -38,17 +40,37 @@ Component( {
     },
     paletteHeight: {
       type: Number,
-      value: 60
+      value: 30
     },
     // 色块显示数目
     num: {
       type: Number,
-      value: 10
+      value: 10,
+      observer: function () {
+        if ( !this.data.imagePath ) {
+          return;
+        } else {
+          this.startAnalyse().then( res => {
+            this.draw();
+          } ).catch( err => {
+            console.error( err )
+          } )
+        }
+      }
     },
     //轮廓宽度
     borderWidth: {
       type: Number, // 0 - 325
-      value: 0
+      value: 0,
+      observer: function () {
+        if ( !this.data.imagePath ) {
+          return;
+        } else {
+          wx.nextTick( () => {
+            this.draw();
+          } )
+        }
+      }
     },
     //轮廓颜色
     borderColor: {
@@ -56,10 +78,10 @@ Component( {
       value: '#fff'//'rgba(0, 0, 0, 0)'
     },
     // 图片填充方式
-    imageFillStyle: {
-      type: String,
-      value: 'original'
-    },
+    // imageFillStyle: {
+    //   type: String,
+    //   value: 'original'
+    // },
     // 颜色代码显示方式
     colorCodeStyle: {
       type: String,
@@ -104,7 +126,7 @@ Component( {
    */
   methods: {
     draw () {
-      if(!this.data.imagePath) {
+      if ( !this.data.imagePath ) {
         return;
       }
       wx.showLoading( {
@@ -113,10 +135,10 @@ Component( {
       } )
 
       const ctx = wx.createCanvasContext( 'myCanvas', this )
-      const Width = this.data.width;
-      const Height = this.data.height;
-      const paletteHeight = ( Number(this.data.paletteHeight) / 750 ) * this.data.windowWidth;
-      const borderWidth = ( Number(this.data.borderWidth) / 750 ) * this.data.windowWidth;
+      let Width = this.data.width;
+      let paletteHeight = this.data.paletteHeight;
+      let borderWidth = Number( this.data.borderWidth );
+      let Height = this.data.info.height / ( this.data.info.width / ( Width - 2 * borderWidth ) ) + 3 * borderWidth + paletteHeight
       ctx.clearRect( 0, 0, Width, Height + paletteHeight );
 
       // draw background color 
@@ -126,22 +148,15 @@ Component( {
       // draw image 
       if ( this.data.imagePath ) {
         let { dx, dy, dw, dh, sx, sy, sw, sh } =
-          getImageFillInfo( this.data.imageFillStyle, this.data.info, borderWidth, borderWidth, this.data.windowWidth - 2 * borderWidth, this.data.windowHeight - paletteHeight - 3 * borderWidth );
-        if ( this.data.imageFillStyle === 'original' ) {
-          this.setData( {
-            height: dh + borderWidth * 3 + paletteHeight
-          })
-          ctx.drawImage( this.data.imagePath, sx, sy, sw, sh, dx, dy, dw, dh )
-        } else {
-          ctx.drawImage( this.data.imagePath, sx, sy, sw, sh, dx, dy, dw, dh );
-        }
+          getImageFillInfo( this.data.imageFillStyle, this.data.info, borderWidth, borderWidth, this.data.windowWidth - 2 * borderWidth, this.data.windowHeight - paletteHeight - borderWidth );
+        ctx.drawImage( this.data.imagePath, sx, sy, sw, sh, dx, dy, dw, dh )
       }
 
       // draw palettes 
-      let num = this.data.palettes.length;
-      if ( this.data.palettes.length && num ) {
+      let num = this.data.num
+      if ( this.data.palettes.length >= this.data.num ) {
         const paletteWidth = ( Width - borderWidth * ( num + 1 ) ) / num;
-        const offsetHeight = Height - paletteHeight - borderWidth;
+        const offsetHeight = Height - borderWidth - paletteHeight;
         for ( let i = 0; i < num; i++ ) {
           let offsetLeft = borderWidth * ( i + 1 ) + i * paletteWidth;
           ctx.setFillStyle( this.data.palettes[i] )
@@ -153,15 +168,16 @@ Component( {
           )
         }
       }
-
-      wx.nextTick( () => {
+      this.setData( {
+        height: Height
+      }, () => {
         ctx.draw( false, () => {
           wx.showToast( {
             title: '绘制成功',
             icon: 'success'
           } );
         } );
-      } );
+      } )
     },
 
     setImagePath ( imagePath ) {
@@ -201,7 +217,7 @@ Component( {
           title: '分析中',
           mask: true
         } )
-        const Width =  this.data.width;
+        const Width = this.data.width;
         const Height = this.data.height;
         const paletteHeight = ( this.data.paletteHeight / 750 ) * this.data.windowWidth;
         const borderWidth = ( this.data.borderWidth / 750 ) * this.data.windowWidth;
@@ -213,20 +229,76 @@ Component( {
           height: Height - 3 * borderWidth - paletteHeight,
           success: res => {
             let palettes = this.getColorByType( res.data )
+            this.triggerEvent( 'setPalettes', { value: palettes } )
             this.setData( { palettes }, () => {
               resolve( palettes )
-            })
+            } )
           },
           fail: err => {
             wx.hideLoading()
             console.error( err )
-            reject(err)
+            reject( err )
           },
           complete () {
             wx.hideLoading()
           }
         }, this )
       } )
+    },
+
+    saveCardToPhotosAlbum () {
+      wx.showLoading( {
+        title: '卡片生成中'
+      } )
+      wx.canvasToTempFilePath( {
+        width: this.data.width,
+        height: this.data.height,
+        canvasId: 'myCanvas',
+        success ( res ) {
+          this.tempFilePath = res.tempFilePath
+          wx.getSetting( {
+            success: res => {
+              if ( !res.authSetting['scope.writePhotosAlbum'] ) {
+                wx.authorize( {
+                  scope: 'scope.writePhotosAlbum',
+                  success: () => {
+                    // 用户已经同意小程序使用保存到相册功能
+                    wx.saveImageToPhotosAlbum( {
+                      filePath: this.tempFilePath,
+                      success: () => {
+                        wx.hideLoading()
+                      },
+                      fail: err => {
+                        wx.hideLoading()
+                        console.error( err )
+                      }
+                    } )
+                  },
+                  fail: err => {
+                    wx.hideLoading()
+                    console.error( err )
+                  }
+                } )
+              } else {
+                wx.saveImageToPhotosAlbum( {
+                  filePath: this.tempFilePath,
+                  success: () => {
+                    wx.hideLoading()
+                  },
+                  fail: err => {
+                    wx.hideLoading()
+                    console.error( err )
+                  }
+                } )
+              }
+            }
+          } )
+        },
+        fail: err => {
+          console.error( err )
+          wx.hideLoading();
+        }
+      }, this )
     }
   }
 } )

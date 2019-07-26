@@ -1,0 +1,7 @@
+<!-- components/coverslider/index.wxml -->
+<cover-view class="slider" style="height: {{blockSize}}px; padding: 0 {{blockSize/2}}px">
+    <cover-view class="slider-inner" bind:tap="touchTap" style="background-color:{{backgroundColor}};width: calc(100% - {{blockSize * 1.25}}px)">
+        <cover-view class="selected-bar" style="background-color:{{activeColor}};width:{{len}}px;"></cover-view>
+    </cover-view>
+    <cover-view bind:touchstart="touchStart" bind:touchmove="touchMove" bind:touchend="touchEnd" class="handler" style="transform: translateX({{len}}px);width:{{blockSize}}px;height:{{blockSize}}px;margin: 0 {{-blockSize/2}}px;background-color:{{blockColor}};"></cover-view>
+</cover-view>

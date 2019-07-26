@@ -1,2 +1,6 @@
 <!-- components/colorcard/index.wxml -->
-<canvas class="cardCanvas" canvas-id="myCanvas" style="height: {{height}}px; width: {{width}}px;" />
+<canvas 
+    class="cardCanvas" 
+    canvas-id="myCanvas" 
+    bind:longpress="saveCardToPhotosAlbum"
+    style="height: {{height}}px; width: {{width}}px;" />

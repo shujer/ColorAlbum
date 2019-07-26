@@ -1,2 +1,26 @@
-<!--miniprogram/pages/tabar/my/index.wxml-->
-<text>miniprogram/pages/tabar/my/index.wxml</text>
+<!-- miniprogram/pages/tabar/my/index.wxml -->
+<view class="container">
+    <swiper class="swiper" indicator-dots autoplay indicator-active-color="{{indicatorActiveColor}}" indicator-color="{{indicatorColor}}">
+        <block wx:for="{{albums}}" wx:key="{{item}}" wx:for-item="album">
+            <swiper-item>
+                <view 
+                    data-id="{{album._id}}"
+                    bindtap="toAlbum"
+                    class="slide" 
+                    style="background-image: url({{album.coverImageURL}}); background-color: {{album.color}}">
+                    {{album.title}}
+                </view>
+            </swiper-item>
+        </block>
+    </swiper>
+    <view class="photowall">
+        <block wx:for="{{photos}}" wx:key="{{photo._id}}" wx:for-item="photo">
+            <view class="tile" data-id="{{photo._id}}" bindtap="toPhoto" style="background-image: url({{photo.tempFileURL}}); background-color: {{photo.color}}"></view>
+        </block>
+    </view>
+    <view wx:if="{{photos.length === 0}}" class="alternate">
+        <view class="btn-create" bindtap="toCreate">开始创作</view>
+        <text class="info">这里空空如也</text>
+        <text class="info">快来开始你的第一个创作吧</text>
+    </view>
+</view>

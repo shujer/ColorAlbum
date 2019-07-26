@@ -30,12 +30,12 @@
 
 .album .title {
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .chevron-leave-active {
-    animation: 1000ms chevron-leave forwards ease-out;
-    -webkit-animation: 1000ms chevron-leave forwards ease-out;
+    animation: 700ms chevron-leave forwards ease-in;
+    -webkit-animation: 700ms chevron-leave forwards ease-in;
 }
 
 @keyframes chevron-leave {

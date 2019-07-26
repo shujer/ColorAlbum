@@ -8,7 +8,7 @@
         <swiper autoplay="{{true}}">
             <block wx:for="{{albums}}" wx:key="{{item._id}}">
                 <swiper-item bind:tap="toAlbum" data-id="{{item._id}}">
-                    <view class="album" style="background-color: {{item.color}}; background-image: url({{item.coverImage.tempFileURL}})">
+                    <view class="album" style="background-color: {{item.color}}; background-image: url({{item.coverImageURL}})">
                         <text class="title">{{item.title}}</text>
                     </view>
                 </swiper-item>
