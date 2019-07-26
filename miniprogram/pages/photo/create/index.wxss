@@ -98,14 +98,14 @@
     margin-top: 80rpx;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 .section:nth-child(1) .section--title {
-    width: 40%;
+    width: 45%;
 }
 
 .section:nth-child(1) .section--body {
-    width: 60%;
+    width: 45%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -115,11 +115,11 @@
     display: inline-block;
     text-align: center;
     width: 30%;
-    padding-left: 30rpx;
+    padding-left: 24rpx;
 }
 
 .section--body {
     width: 68%;
-    padding-right: 30rpx;
+    padding-right: 24rpx;
     overflow: hidden;
 }

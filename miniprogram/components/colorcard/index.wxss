@@ -1,1 +1,28 @@
 /* components/colorcard/index.wxss */
+.cardCanvas {
+    position: relative;
+}
+.palettes {
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.palette {
+    display: inline-block;
+}
+
+.tooltip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    font-size: 25px;
+    font-weight: 400;
+    text-align: center;
+    line-height: 100vh;
+    color: #fff;
+    text-shadow: 0 0 10rpx #9F8BE5;
+    opacity: .85;
+    z-index: 999;
+}

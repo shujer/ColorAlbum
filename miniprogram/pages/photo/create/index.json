@@ -2,6 +2,7 @@
   "usingComponents": {
     "color-card": "../../../components/colorcard/index",
     "cover-input": "../../../components/coverinput/index",
-    "cover-slider": "../../../components/coverslider/index"
+    "cover-slider": "../../../components/coverslider/index",
+    "cover-radio": "../../../components/coverradio/index"
   }
 }

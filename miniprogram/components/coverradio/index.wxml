@@ -1,0 +1,11 @@
+<!-- components/coverradio/index.wxml -->
+<cover-view class="radio-group">
+    <cover-view class="radio" wx:for="{{groups}}" wx:key="{{item.value}}">
+        <cover-view 
+            data-name="{{item.name}}"
+            bind:tap="changeChecked"
+            class="circle {{value === item.name ? 'checked': 'unchecked'}}">
+        </cover-view>
+        <cover-view class="label">{{item.name}}</cover-view>
+    </cover-view>
+</cover-view>

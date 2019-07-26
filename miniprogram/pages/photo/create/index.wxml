@@ -51,7 +51,9 @@
             </cover-view>
             <cover-view class="section">
                 <cover-view class="section--title">颜色代码</cover-view>
-                <cover-view class="section--body">{{description}}</cover-view>
+                <cover-view class="section--body">
+                    <cover-radio name="Color" data-name="colorCodeStyle" bind:setColor="setField" groups="{{radios}}" value="{{colorCodeStyle}}"></cover-radio>
+                </cover-view>
             </cover-view>
             <cover-view class="section">
                 <cover-view class="section--title">相册</cover-view>

@@ -16,7 +16,12 @@ Page( {
     borderColor: '#fff',
     num: 10,
     colorCodeStyle: 'hex',
-    palettes: []
+    palettes: [],
+    radios: [
+      {name: 'hex', value: 'hex'},
+      {name: 'rgb', value: 'rgb'},
+      {name: 'gray', value: 'gray'}
+    ]
   },
 
   onLoad () {

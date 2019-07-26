@@ -78,14 +78,25 @@ Component( {
       value: '#fff'//'rgba(0, 0, 0, 0)'
     },
     // 图片填充方式
-    // imageFillStyle: {
-    //   type: String,
-    //   value: 'original'
-    // },
+    imageFillStyle: {
+      type: String,
+      value: 'original'
+    },
     // 颜色代码显示方式
     colorCodeStyle: {
       type: String,
-      value: 'hex'
+      value: 'hex',
+      observer: function () {
+        if ( !this.data.imagePath ) {
+          return;
+        } else {
+          this.startAnalyse().then( res => {
+            this.draw();
+          } ).catch( err => {
+            console.error( err )
+          } )
+        }
+      }
     },
     // 是否显示颜色代码详情/文字
     showColorCode: {
@@ -104,7 +115,8 @@ Component( {
    */
   data: {
     width: 750, // 画布大小
-    height: 800 // 画布大小
+    height: 800, // 画布大小,
+    showToolTip: false
   },
 
   lifetimes: {
@@ -153,10 +165,10 @@ Component( {
       }
 
       // draw palettes 
-      let num = this.data.num
+      const num = this.data.num;
+      const paletteWidth = ( Width - borderWidth * ( num + 1 ) ) / num;
+      const offsetHeight = Height - borderWidth - paletteHeight;
       if ( this.data.palettes.length >= this.data.num ) {
-        const paletteWidth = ( Width - borderWidth * ( num + 1 ) ) / num;
-        const offsetHeight = Height - borderWidth - paletteHeight;
         for ( let i = 0; i < num; i++ ) {
           let offsetLeft = borderWidth * ( i + 1 ) + i * paletteWidth;
           ctx.setFillStyle( this.data.palettes[i] )
@@ -169,7 +181,8 @@ Component( {
         }
       }
       this.setData( {
-        height: Height
+        height: Height,
+        paletteWidth
       }, () => {
         ctx.draw( false, () => {
           wx.showToast( {
@@ -299,6 +312,26 @@ Component( {
           wx.hideLoading();
         }
       }, this )
-    }
+    },
+      /**
+   * 显示颜色代码提示
+   * @param {event} e 
+   */
+    tooltipShow ( e ) {
+      if ( !e ) return
+      let color = e.currentTarget.dataset.color.toUpperCase()
+      this.setData( {
+        color,
+        showToolTip: true,
+      } )
+    },
+    /**
+     * 隐藏颜色代码提示
+     */
+    tooltipHide () {
+      this.setData( {
+        showToolTip: false,
+      } )
+    },
   }
 } )
