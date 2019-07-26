@@ -16,6 +16,6 @@
         </swiper>
     </view>
     <view class="create-btn" bind:tap="toCreate" wx:if="{{!showPanel}}">
-        <view class="iconfont icon-uploadphoto1"></view>
+        <view class="iconfont icon-jia_sekuai"></view>
     </view>
 </view>

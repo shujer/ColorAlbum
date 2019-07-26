@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "新建卡片",
   "usingComponents": {
     "color-card": "../../../components/colorcard/index",
     "cover-input": "../../../components/coverinput/index",

@@ -1,0 +1,30 @@
+/* miniprogram/pages/album/select/index.wxss */
+.container {
+    width: 100%;
+}
+
+.album-container {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 24rpx 24rpx;
+}
+
+.album {
+    box-sizing: border-box;
+    width: 100%;
+    height: 200rpx;
+    padding: 20rpx 20rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    color: #5e5e5f;
+    margin-bottom: 20rpx;
+}
+
+.album .image {
+    width: 180rpx;
+    height: 180rpx;
+    background-position: center center;
+    background-size: cover;
+}

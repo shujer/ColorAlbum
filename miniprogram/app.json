@@ -9,7 +9,8 @@
     "pages/photo/edit/index",
     "pages/album/create/index",
     "pages/album/edit/index",
-    "pages/album/show/index"
+    "pages/album/show/index",
+    "pages/album/select/index"
   ],
   "window": {
     "backgroundColor": "#9F8BE5",

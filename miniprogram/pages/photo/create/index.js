@@ -1,5 +1,6 @@
 // miniprogram/pages/photo/create/index.js
 const imageApi = require( '../../../api/image' )
+const app = getApp()
 
 Page( {
 
@@ -18,10 +19,25 @@ Page( {
     colorCodeStyle: 'hex',
     palettes: [],
     radios: [
-      {name: 'hex', value: 'hex'},
-      {name: 'rgb', value: 'rgb'},
-      {name: 'gray', value: 'gray'}
+      { name: 'hex', value: 'hex' },
+      { name: 'rgb', value: 'rgb' },
+      { name: 'gray', value: 'gray' }
     ]
+  },
+
+  onShow () {
+    let album = app.globalData.selectedAlbum;
+    if ( !album ) {
+      for ( let a in app.globalData.albums ) {
+        album = app.globalData.albums[a];
+        break;
+      }
+    }
+    if(album) {
+      this.setData({album, hasAlbum: true})
+    } else {
+      this.setData({hasAlbum: false})
+    }
   },
 
   onLoad () {
@@ -29,12 +45,12 @@ Page( {
     const width = systemInfo.windowWidth
     this.setData( {
       minHeight: 120 / 750 * width,
-      maxHeight: 780 / 750 * width,
+      maxHeight: 810 / 750 * width,
       width
     } )
   },
 
-  generatePalettes() {
+  generatePalettes () {
     this.hidePanel();
     this.selectComponent( '#card' ).startAnalyse()
   },
@@ -83,12 +99,12 @@ Page( {
       delay: 0
     } );
     this.animation = animation;
-    animation.opacity(0).step();
+    animation.opacity( 0 ).step();
     this.setData( {
       animationData: animation.export()
     } )
     setTimeout( () => {
-      animation.opacity(1).step();
+      animation.opacity( 1 ).step();
       this.setData( {
         animationData: animation
       } )
@@ -96,7 +112,7 @@ Page( {
   },
 
   showPanel ( e ) {
-    if(!this.data.showPanel) return;
+    if ( !this.data.showPanel ) return;
     var animation = wx.createAnimation( {
       duration: 250,
       timingFunction: "ease-out",
@@ -119,7 +135,7 @@ Page( {
   },
 
   hidePanel () {
-    if(!this.data.showPanel) return;
+    if ( !this.data.showPanel ) return;
     var animation = wx.createAnimation( {
       duration: 250,
       timingFunction: "ease-out",
@@ -147,4 +163,9 @@ Page( {
     this.setData( { [name]: e.detail.value } )
   },
 
+  toAlbumSelect() {
+    wx.navigateTo({
+      url: '../../album/select/index'
+    });
+  }
 } )

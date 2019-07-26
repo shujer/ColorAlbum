@@ -1,4 +1,4 @@
-// miniprogram/pages/tabar/home/index.js
+// miniprogram/pages/album/select/index.js
 const app = getApp()
 const genColor = require( '../../../utils/genColor' )
 const imageApi = require( '../../../api/image' )
@@ -10,14 +10,13 @@ Page( {
    * 页面的初始数据
    */
   data: {
-    albums: [],
-    animationClass: ''
+    albums: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function ( options ) {
+  onShow: function ( options ) {
     albumApi.getAlbumsByUser( app.globalData.openid ).then( albums => {
       let fileList = []
       albums = albums.map( ( album, index ) => {
@@ -39,37 +38,20 @@ Page( {
         console.log( '相册封面获取失败', err );
       } )
     } )
-
   },
 
-  toCreate: function () {
-    this.setData( {
-      animationClass: 'chevron-leave-active'
-    }, () => {
-      setTimeout( () => {
-        wx.navigateTo( {
-          url: '../../photo/create/index',
-        } );
-      }, 500 );
-    } )
+  selectAlbum(e) {
+    let index = e.currentTarget.dataset.index;
+    app.globalData.selectedAlbum = this.data.albums[index]
+    wx.navigateBack({
+      delta: 1
+    });  
   },
 
-  toAlbum: function () {
-    this.setData( {
-      animationClass: 'chevron-leave-active'
-    }, () => {
-      setTimeout( () => {
-        wx.navigateTo( {
-          url: '../../album/show/index',
-        } );
-      }, 800 );
-    } )
-  },
-
-  onShow () {
-    this.setData( {
-      animationClass: ''
-    } )
+  toAlbumCreate() {
+    wx.navigateTo({
+      url: '../create/index',
+    });
+      
   }
-
 } )
