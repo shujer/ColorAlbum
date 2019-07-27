@@ -5,7 +5,10 @@ const { transferArrayToObj } = require( '../utils/transfer' );
 function addPhoto ( data ) {
     return new Promise( ( resolve, reject ) => {
         db.collection( 'photo' ).add( {
-            data
+            data: {
+                ...data,
+                due: new Date()
+            }
         } ).then( res => {
             let { _id } = res;
             app.globalData.photos[_id] = data;
@@ -19,8 +22,10 @@ function addPhoto ( data ) {
 
 function deletePhoto ( id ) {
     return new Promise( ( resolve, reject ) => {
-        db.collection( 'photo' ).where( { _id: id } ).remove().then( res => {
-            app.globalData.photos[id] = null;
+        db.collection( 'photo' ).doc( id ).remove().then( res => {
+            let { id, ...rest } = app.globalData.photos
+            app.globalData.photos = rest;
+            console.log( app.globalData.photos )
             resolve( res );
         } ).catch( err => {
             console.error( '[数据库][remove]调用失败', err );
@@ -32,7 +37,7 @@ function deletePhoto ( id ) {
 function editPhoto ( id, data ) {
     return new Promise( ( resolve, reject ) => {
         db.collection( 'photo' ).doc( id ).update( { data } ).then( res => {
-            app.globalData.photos[id] = { ...app.globalData.photos[id], ...data };
+            app.globalData.photos[id] = { ...app.globalData.photos[id], id: data };
             resolve( res );
         } ).catch( err => {
             console.error( '[数据库][add]调用失败', err );
@@ -47,7 +52,7 @@ function getPhotoDetailById ( id ) {
             resolve( app.globalData.photos[id] )
         } else {
             db.collection( 'photo' )
-                .where( { _id: id } )
+                .doc( id )
                 .get().then( ( { data } ) => {
                     app.globalData.photos[id] = data[0]
                     resolve( data[0] )
@@ -59,39 +64,27 @@ function getPhotoDetailById ( id ) {
     } )
 }
 
-function getPhotosByUser ( openid, skip = 0, limit = 10 ) {
+
+function getPhotosByTime ( openid, limit = 10, due ) {
     return new Promise( ( resolve, reject ) => {
-        if ( !skip ) {
-            db.collection( 'photo' )
-                .where( { _openid: openid } )
-                .limit( limit )
-                .get().then( ( { data } ) => {
-                    let photos = transferArrayToObj( '_id', data );
-                    app.globalData.photos = { ...app.globalData.photos, ...photos };
-                    resolve( data );
-                } ).catch( err => {
-                    console.error( '[数据库] [get] 调用失败', err )
-                    reject( err )
-                } )
-        } else {
-            db.collection( 'photo' )
-                .where( { _openid: openid } )
-                .skip( skip )
-                .limit( limit )
-                .get().then( ( { data } ) => {
-                    let photos = transferArrayToObj( '_id', data );
-                    app.globalData.photos = { ...app.globalData.photos, ...photos };
-                    resolve( data );
-                } ).catch( err => {
-                    console.error( '[数据库] [get] 调用失败', err )
-                    reject( err )
-                } )
-        }
+        const _ = db.command
+        db.collection( 'photo' )
+            .where( { _openid: openid, due: _.lt( due ) } )
+            .orderBy( 'due', 'desc' )
+            .limit( limit )
+            .get().then( ( { data } ) => {
+                let photos = transferArrayToObj( '_id', data );
+                app.globalData.photos = { ...app.globalData.photos, ...photos };
+                resolve( data );
+            } ).catch( err => {
+                console.error( '[数据库] [get] 调用失败', err )
+                reject( err )
+            } )
     } )
 }
 
 module.exports = {
-    getPhotosByUser,
+    getPhotosByTime,
     addPhoto,
     deletePhoto,
     editPhoto,
