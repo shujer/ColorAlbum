@@ -1,0 +1,7 @@
+<!--components/loading/index.wxml-->
+  <view class="spinner" style="width: {{size}}px; height: {{size}}px;">
+    <view class="rect"></view>
+    <view class="rect"></view>
+    <view class="rect"></view>
+    <view class="rect"></view>
+  </view>

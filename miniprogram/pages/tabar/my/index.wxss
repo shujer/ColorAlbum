@@ -60,3 +60,11 @@
         rgba(255, 255, 255, .6) 60%,
         rgba(255, 255, 255, 0) 100%);
 }
+
+.loading-container {
+    height: 120rpx;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

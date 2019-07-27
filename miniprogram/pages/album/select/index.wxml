@@ -7,6 +7,6 @@
         </view>
     </view>
     <view class="create-btn" bind:tap="toAlbumCreate">
-        <view class="iconfont icon-jia_sekuai"></view>
+        <cover-image class="icon add-icon" src="../../../assets/icons/add.png"></cover-image>
     </view>
 </view>

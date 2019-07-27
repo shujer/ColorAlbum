@@ -15,7 +15,7 @@
             </block>
         </swiper>
     </view>
-    <view class="create-btn" bind:tap="toCreate" wx:if="{{!showPanel}}">
-        <view class="iconfont icon-jia_sekuai"></view>
-    </view>
+    <cover-view class="create-btn" bind:tap="toCreate">
+        <cover-image class="icon add-icon" src="../../../assets/icons/add.png"></cover-image>
+    </cover-view>
 </view>

@@ -70,9 +70,6 @@ Page( {
             showPanel: true
           }, () => {
             this.createBtnFade()
-            setTimeout( () => {
-              this.selectComponent( '#card' ).startAnalyse()
-            }, 1600 )
           } )
         }
       } );
@@ -95,7 +92,7 @@ Page( {
 
   createBtnFade () {
     var animation = wx.createAnimation( {
-      duration: 1300,
+      duration: 1200,
       timingFunction: "ease-in",
       delay: 0
     } );
@@ -109,7 +106,7 @@ Page( {
       this.setData( {
         animationData: animation
       } )
-    }, 1300 )
+    }, 1200 )
   },
 
   showPanel ( e ) {
@@ -160,7 +157,6 @@ Page( {
 
   setField ( e ) {
     let name = e.currentTarget.dataset.name;
-    console.log( e.detail.value )
     this.setData( { [name]: e.detail.value } )
   },
 
@@ -183,52 +179,45 @@ Page( {
       title: '创建中',
       mask: true
     } );
-    let {
-      title,
-      description,
-      album: { _id: albumID },
-      borderWidth,
-      borderColor,
-      num,
-      colorCodeStyle,
-      palettes } = this.data
-
     imageApi.uploadImage( this.data.imagePath ).then( res => {
-      console.log( res )
-      photoApi.addPhoto(
-        {
-          title,
-          description,
-          albumID,
-          fileID: res.fileID,
-          photoSettings: {
-            borderWidth,
-            borderColor,
-            num,
-            colorCodeStyle
-          },
-          palettes
-        }
-      ).then( res => {
+      let photo = {
+        title: this.data.title,
+        description: this.data.description,
+        albumID: this.data.album._id,
+        fileID: res.fileID,
+        photoSettings: {
+          borderWidth: this.data.borderWidth,
+          borderColor: this.data.borderColor,
+          num: this.data.num,
+          colorCodeStyle: this.data.colorCodeStyle
+        },
+        palettes: this.data.palettes,
+        due: new Date()
+      }
+      photoApi.addPhoto( photo ).then( res => {
+        app.emitAddPhoto( { photo: { ...photo, _id: res._id, tempFileURL: this.data.imagePath } } )
         wx.hideLoading();
-        setTimeout( () => {
-          wx.showToast( {
-            title: '创建成功',
-            mask: true,
-            duration: 1600,
-            success: () => {
+        wx.showToast( {
+          title: '创建成功',
+          mask: true,
+          duration: 1200,
+          success: () => {
+            setTimeout( () => {
               wx.redirectTo( {
                 url: `../show/index?id=${res._id}`
               } )
-            }
-          } )
+            }, 1200 )
+          }
         } )
+
       } ).catch( err => {
+        console.error( '创建失败', err )
         wx.showToast( {
           title: '创建失败'
         } )
       } )
     } ).catch( err => {
+      console.error( '创建失败', err )
       wx.showToast( {
         title: '创建失败'
       } )

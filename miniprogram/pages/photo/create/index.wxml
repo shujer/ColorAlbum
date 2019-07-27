@@ -3,12 +3,12 @@
     <scroll-view scroll-y="{{true}}" class="draw-container">
         <color-card data-name="palettes" bind:setPalettes="setField" id="card" imagePath="{{imagePath}}" palettes="{{palettes}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
         <view class="placehoder">
-            <text class="info">长按图片可保存到本地</text>
             <text class="info">点击色块可查看颜色代码</text>
+            <text class="info">如果没有看到色块可点击重新生成</text>
         </view>
     </scroll-view>
     <view class="create-btn" bind:tap="chooseImage" wx:if="{{!showPanel}}">
-        <view class="iconfont icon-uploadphoto1"></view>
+        <cover-image class="icon add-icon" src="../../../assets/icons/pic-camera_add.png"></cover-image>
     </view>
     <cover-view animation="{{animationData}}" class="control-panel">
         <cover-view class="panel-content">

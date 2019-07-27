@@ -1,2 +1,10 @@
-<!--miniprogram/pages/photo/show/index.wxml-->
-<text>miniprogram/pages/photo/show/index.wxml</text>
+<!-- miniprogram/pages/photo/show/index.wxml -->
+<view class="container">
+    <color-card autoAnalyse="{{false}}" data-name="palettes" id="card" imagePath="{{imagePath}}" palettes="{{palettes}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
+    <view class="placehoder"></view>
+    <cover-view class="tabbar">
+        <cover-image bind:tap="toEdit" class="tab" src="../../../assets/icons/edit_white.png"></cover-image>
+        <cover-image bind:tap="saveLocal" class="tab" src="../../../assets/icons/savelocal_white.png"></cover-image>
+        <cover-image bind:tap="deletePhoto" class="tab" src="../../../assets/icons/delete_white.png"></cover-image>
+    </cover-view>
+</view>

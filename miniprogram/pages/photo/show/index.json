@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "卡片详情",
-  "usingComponents": {}
+  "usingComponents": {
+    "color-card": "../../../components/colorcard/index"
+  }
 }

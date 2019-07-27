@@ -27,7 +27,7 @@ Page( {
       this.setData( {
         albums
       } )
-      imageApi.getImageByFileID( fileList ).then( res => {
+      imageApi.getImagesByFileID( fileList ).then( res => {
         albums = albums.map( ( album, index ) => {
           album.coverImageURL = res[index].tempFileURL
           return album;

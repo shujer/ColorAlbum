@@ -29,7 +29,7 @@ function addAlbum ( { title = '默认', description = '', isPrivate = '', coverI
 
 function deleteAlbum ( id ) {
     return new Promise( ( resolve, reject ) => {
-        db.collection( 'album' ).where( { _id: id } ).remove().then( res => {
+        db.collection( 'album' ).doc(id ).remove().then( res => {
             app.globalData.albums[id] = null;
             try {
                 wx.setStorageSync( 'album', app.globalData.albums );

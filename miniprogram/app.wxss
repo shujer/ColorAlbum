@@ -1,5 +1,3 @@
-@import './style/iconfont.wxss';
-
 page {
     background: #9F8BE5;
     color: #fff;
@@ -33,8 +31,8 @@ button::after {
 .create-btn {
     position: fixed;
     bottom: 100rpx;
-    width: 300rpx;
-    height: 300rpx;
+    width: 280rpx;
+    height: 280rpx;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -52,7 +50,8 @@ button::after {
     -o-border-radius:50%;
 }
 
-.create-btn .iconfont {
-    font-size: 100rpx;
+.create-btn .icon {
+    width: 120rpx;
+    height: 120rpx;
     color: #fff;
 }

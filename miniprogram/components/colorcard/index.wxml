@@ -1,6 +1,6 @@
 <!-- components/colorcard/index.wxml -->
 <block>
-    <canvas class="cardCanvas" canvas-id="myCanvas" bind:longpress="saveCardToPhotosAlbum" style="height: {{height}}px; width: {{width}}px;">
+    <canvas class="cardCanvas" canvas-id="myCanvas" style="height: {{height}}px; width: {{width}}px;">
         <cover-view class="palettes" style="bottom:{{borderWidth}}px; left: {{borderWidth}}px;height:{{paletteHeight}}px;">
             <cover-view bindtap="tooltipShow" data-color="{{item}}" wx:for="{{ palettes }}" wx:key="{{index}}" class="palette" style="width: {{paletteWidth + borderWidth}}px; height: {{paletteHeight}}px;"></cover-view>
         </cover-view>

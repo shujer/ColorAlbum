@@ -7,23 +7,43 @@ Component( {
    * 组件的属性列表
    */
   properties: {
+    autoAnalyse: {
+      type: Boolean,
+      value: true
+    },
     // 图片临时路径
     imagePath: {
       type: String,
       value: null,
       observer: function ( newImagePath ) {
         if ( !newImagePath ) return;
-        wx.getImageInfo( {
-          src: newImagePath,
-          success: info => {
+        if ( this.data.autoAnalyse ) {
+          wx.getImageInfo( {
+            src: newImagePath,
+            success: info => {
+              this.setData( { info, palettes: [] }, () => {
+                this.draw()
+                setTimeout( () => {
+                  this.startAnalyse().then( res => this.draw )
+                }, 1200 );
+              } )
+            },
+            fail: err => {
+              console.log( '获取图片信息失败', err )
+            }
+          } )
+        } else {
+          wx.getImageInfo( {
+            src: newImagePath,
+            success: info => {
+              this.setData( { info }, () => this.draw() )
+            },
+            fail: err => {
+              console.log( '获取图片信息失败', err )
+            }
+          } )
+        }
 
-            this.setData( { info, palettes: [] }, () => this.draw() )
-
-          },
-          fail: err => {
-            console.log( '获取图片信息失败', err )
-          }
-        } )
       }
     },
     //色块颜色
@@ -31,11 +51,7 @@ Component( {
       type: Array,
       value: [],
       observer: function () {
-        if ( !this.data.imagePath ) {
-          return;
-        } else {
-          this.draw()
-        }
+        this.draw()
       }
     },
     paletteHeight: {
@@ -46,15 +62,15 @@ Component( {
     num: {
       type: Number,
       value: 10,
-      observer: function () {
-        if ( !this.data.imagePath ) {
-          return;
-        } else {
-          this.startAnalyse().then( res => {
-            this.draw();
-          } ).catch( err => {
-            console.error( err )
+      observer: function ( newData ) {
+        if ( this.data.autoAnalyse && this.data.imagePath ) {
+          this.startAnalyse().then( palettes => {
+            this.setData( { palettes }, () => this.draw() )
           } )
+        } else {
+
+          this.draw();
+
         }
       }
     },
@@ -87,14 +103,12 @@ Component( {
       type: String,
       value: 'hex',
       observer: function () {
-        if ( !this.data.imagePath ) {
-          return;
-        } else {
-          this.startAnalyse().then( res => {
-            this.draw();
-          } ).catch( err => {
-            console.error( err )
+        if ( this.data.autoAnalyse && this.data.imagePath ) {
+          this.startAnalyse().then( palettes => {
+            this.setData( { palettes }, () => this.draw() )
           } )
+        } else {
+          this.draw();
         }
       }
     },
@@ -138,7 +152,7 @@ Component( {
    */
   methods: {
     draw () {
-      if ( !this.data.imagePath ) {
+      if ( !this.data.imagePath || !this.data.info ) {
         return;
       }
       wx.showLoading( {
@@ -185,10 +199,11 @@ Component( {
         paletteWidth
       }, () => {
         ctx.draw( false, () => {
-          wx.showToast( {
-            title: '绘制成功',
-            icon: 'success'
-          } );
+          wx.hideLoading()
+          // wx.showToast( {
+          //   title: '绘制成功',
+          //   icon: 'success'
+          // } );
         } );
       } )
     },
@@ -313,10 +328,10 @@ Component( {
         }
       }, this )
     },
-      /**
-   * 显示颜色代码提示
-   * @param {event} e 
-   */
+    /**
+ * 显示颜色代码提示
+ * @param {event} e 
+ */
     tooltipShow ( e ) {
       if ( !e ) return
       let color = e.currentTarget.dataset.color.toUpperCase()

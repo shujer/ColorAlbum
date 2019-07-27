@@ -1,1 +1,21 @@
 /* miniprogram/pages/photo/show/index.wxss */
+.tabbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 116rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #9F8BE5;
+    opacity: .9;
+}
+
+.tabbar .tab {
+    width: 50rpx;
+    height: 50rpx;
+}
+
+.placehoder {
+    height: 116rpx;
+}
