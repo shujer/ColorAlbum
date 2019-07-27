@@ -10,13 +10,14 @@
     "pages/album/create/index",
     "pages/album/edit/index",
     "pages/album/show/index",
-    "pages/album/select/index"
+    "pages/album/select/index",
+    "pages/tabar/mood/egg/index"
   ],
   "window": {
     "backgroundColor": "#9F8BE5",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#9F8BE5",
-    "navigationBarTitleText": "采色",
+    "navigationBarTitleText": "色彩相册",
     "navigationBarTextStyle": "white"
   },
   "tabBar": {

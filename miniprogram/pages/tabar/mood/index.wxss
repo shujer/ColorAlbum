@@ -1,1 +1,16 @@
 /* miniprogram/pages/tabar/mood/index.wxss */
+
+.container {
+    padding: 200rpx 40rpx;
+}
+
+.quote {
+    font-size: 20px;
+    line-height: 36px;
+}
+
+.cite {
+    line-height: 36px;
+    align-self: flex-end;
+}
+

@@ -1,5 +1,6 @@
 <!-- miniprogram/pages/tabar/home/index.wxml -->
-<view class="container {{animationClass}}">
+<!--  {{animationClass}} -->
+<view class="container">
     <view class="alternate-content" wx:if="{{albums.length === 0}}" bind:tap="toCreate">
         <text>这里空空如也</text>
         <text>快来开始你的第一个创作吧</text>

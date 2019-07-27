@@ -43,27 +43,33 @@ Page( {
   },
 
   toCreate: function () {
-    this.setData( {
-      animationClass: 'chevron-leave-active'
-    }, () => {
-      setTimeout( () => {
-        wx.navigateTo( {
-          url: '../../photo/create/index',
-        } );
-      }, 500 );
-    } )
+    wx.navigateTo( {
+      url: '../../photo/create/index',
+    } );
+    // this.setData( {
+    //   animationClass: 'chevron-leave-active'
+    // }, () => {
+    //   setTimeout( () => {
+    //     wx.navigateTo( {
+    //       url: '../../photo/create/index',
+    //     } );
+    //   }, 500 );
+    // } )
   },
 
   toAlbum: function () {
-    this.setData( {
-      animationClass: 'chevron-leave-active'
-    }, () => {
-      setTimeout( () => {
-        wx.navigateTo( {
-          url: '../../album/show/index',
-        } );
-      }, 800 );
-    } )
+    wx.navigateTo( {
+      url: '../../album/show/index',
+    } );
+    // this.setData( {
+    //   animationClass: 'chevron-leave-active'
+    // }, () => {
+    //   setTimeout( () => {
+    //     wx.navigateTo( {
+    //       url: '../../album/show/index',
+    //     } );
+    //   }, 800 );
+    // } )
   },
 
   onShow () {

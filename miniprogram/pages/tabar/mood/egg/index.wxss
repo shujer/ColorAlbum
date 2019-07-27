@@ -1,0 +1,16 @@
+/* miniprogram/pages/tabar/mood/egg/index.wxss */
+
+.container {
+    padding: 120rpx 40rpx;
+}
+
+.tip {
+    font-size: 16px;
+    line-height: 36px;
+}
+
+.section, .input {
+    width: 100%;
+    background-color: #fff;
+    color: black;
+}

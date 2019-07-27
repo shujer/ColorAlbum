@@ -1,0 +1,12 @@
+<!-- miniprogram/pages/tabar/mood/egg/index.wxml -->
+<view class="container">
+    <text class="tip">
+        hello, 你触发了一个彩蛋。你也许会疑惑“心情”页面好像没什么内容？这是因为一些有趣的功能还未上线，如果你有什么好的想法，欢迎在下方留言给我~
+    </text>
+    <view class="section">
+        <form bindsubmit="bindFormSubmit">
+            <textarea class="input" placeholder="欢迎给我留言" name="textarea" />
+            <button form-type="submit">提交</button>
+        </form>
+    </view>
+</view>
