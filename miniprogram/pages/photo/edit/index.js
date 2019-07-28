@@ -1,66 +1,172 @@
-// miniprogram/pages/photo/edit/index.js
-Page({
+const imageApi = require( '../../../api/image' )
+const photoApi = require( '../../../api/photo' )
+const app = getApp()
 
+Page( {
+  eventsListener: {},
   /**
    * 页面的初始数据
    */
   data: {
-
+    imagePath: null,
+    showPanel: false,
+    openStatus: false,
+    title: '',
+    description: '',
+    borderWidth: 0,
+    borderColor: '#fff',
+    num: 10,
+    colorCodeStyle: 'hex',
+    palettes: [],
+    radios: [
+      { name: 'hex', value: 'hex' },
+      { name: 'rgb', value: 'rgb' },
+      { name: 'gray', value: 'gray' }
+    ],
+    autoAnalyse: false,
+    album: {},
+    hasAlbum: false
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
+  onLoad: function ( options ) {
+    let { id } = options;
+    wx.showLoading( {
+      title: '加载中',
+      mask: true
+    } )
+    photoApi.getPhotoDetailById( id ).then( res => {
+      let { photoSettings, fileID, ...rest } = res
+      imageApi.getImageByFileID( fileID ).then( path => {
+        this.setData( {
+          ...rest,
+          ...photoSettings,
+          fileID,
+          imagePath: path,
+          id,
+          hasAlbum: true
+        } )
+      } ).catch( err => {
+        console.log( err )
+        wx.showToast( {
+          title: '加载失败',
+          icon: 'none'
+        } )
+      } )
+    } ).catch( err => {
+      console.log( err )
+      wx.showToast( {
+        title: '加载失败',
+        icon: 'none'
+      } )
+    } )
 
+    const systemInfo = wx.getSystemInfoSync();
+    const width = systemInfo.windowWidth
+    this.setData( {
+      minHeight: 120 / 750 * width,
+      maxHeight: 810 / 750 * width,
+      width
+    } )
+
+    //监听相册选择
+    this.eventsListener.albumSelect = app.events.on( 'albumSelect', ( { album } ) => {
+      console.log( '有相册选择：', album )
+      this.setData( {
+        album: album,
+        hasAlbum: true
+      } )
+    } )
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  onUnload () {
+    //卸载监听函数
+    for ( let i in this.eventsListener ) {
+      app.events.remove( i, this.eventsListener[i] )
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
+  generatePalettes () {
+    this.hidePanel();
+    this.selectComponent( '#card' ).startAnalyse()
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
+  editPhoto () {
+    if ( this.data.openStatus ) {
+      this.hidePanel()
+    } else {
+      this.showPanel()
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
+  showPanel ( e ) {
+    var animation = wx.createAnimation( {
+      duration: 250,
+      timingFunction: "ease-out",
+      delay: 0
+    } );
+    // 第一组动画
+    this.animation = animation;
+    animation.translateY( this.data.maxHeight ).step();
+    this.setData( {
+      animationData: animation.export()
+    } )
+    // 第二组动画
+    setTimeout( () => {
+      animation.translateY( this.data.minHeight ).step()
+      this.setData( {
+        animationData: animation,
+        openStatus: true
+      } )
+    }, 200 )
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
+  hidePanel () {
+    var animation = wx.createAnimation( {
+      duration: 250,
+      timingFunction: "ease-out",
+      delay: 0
+    } );
+    // 第一组动画
+    this.animation = animation;
+    animation.translateY( this.data.minHeight ).step();
+    this.setData( {
+      animationData: animation.export()
+    } )
+    // 第二组动画
+    setTimeout( () => {
+      animation.translateY( this.data.maxHeight ).step()
+      this.setData( {
+        animationData: animation,
+        openStatus: false
+      } )
+    }, 200 )
   },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
+  setField ( e ) {
+    let name = e.currentTarget.dataset.name;
+    if ( !this.data.autoAnalyse ) {
+      this.setData( { autoAnalyse: true }, () => {
+        this.setData( { [name]: e.detail.value } )
+      } )
+    } else {
+      this.setData( { [name]: e.detail.value } )
+    }
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
+  toAlbumSelect () {
+    wx.navigateTo( {
+      url: '../../album/select/index'
+    } );
+  },
 
+  uploadPhoto () {
+    if ( !this.data.imagePath ) {
+      wx.showToast( { title: '请先选择图片', icon: 'none' } )
+      return;
+    }
+    if ( !this.data.album || !this.data.album._id ) {
+      wx.showToast( { title: '请先选择相册', icon: 'none' } )
+      return;
+    }
   }
-})
+} )

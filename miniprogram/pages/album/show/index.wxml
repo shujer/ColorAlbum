@@ -1,8 +1,8 @@
 <!-- miniprogram/pages/tabar/my/index.wxml -->
 <view class="container">
     <view class="photowall">
-        <view wx:if="{{hasLoaded}}" class="tile__create" bind:tap="toCreate" >
-            <image class="tile__image" src="../../../assets/icons/add.png" mode="aspectFit"/>
+        <view wx:if="{{hasLoaded}}" class="tile__create" bind:tap="toCreate">
+            <image class="tile__image" src="../../../assets/icons/add.png" mode="aspectFit" />
         </view>
         <block wx:for="{{photos}}" wx:key="{{photo._id}}" wx:for-item="photo">
             <view class="tile" data-id="{{photo._id}}" bindtap="toPhoto" style="background-image: url({{photo.tempFileURL}}); background-color: {{photo.bgColor}}"></view>
@@ -11,4 +11,8 @@
     <view wx:if="{{isLoading}}" class="loading-container">
         <loading class="loading--spin" size="{{30}}"></loading>
     </view>
+    <cover-view class="tabbar">
+        <cover-image bind:tap="toEdit" class="tab" src="../../../assets/icons/edit_white.png"></cover-image>
+        <cover-image bind:tap="deleteAlbum" class="tab" src="../../../assets/icons/delete_white.png"></cover-image>
+    </cover-view>
 </view>

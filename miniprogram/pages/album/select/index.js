@@ -61,7 +61,7 @@ Page( {
   },
   selectAlbum ( e ) {
     let index = e.currentTarget.dataset.index;
-    app.globalData.selectedAlbum = this.data.albums[index]
+    app.emitSelectAlbum({album: this.data.albums[index]})
     wx.navigateBack( {
       delta: 1
     } );

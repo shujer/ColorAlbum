@@ -29,7 +29,8 @@ function addAlbum ( data ) {
 function deleteAlbum ( id ) {
     return new Promise( ( resolve, reject ) => {
         db.collection( 'album' ).doc( id ).remove().then( res => {
-            let {id, ...rest} = app.globalData.albums;
+            let {[id]: data, ...rest} = app.globalData.albums;
+            console.log(rest)
             app.globalData.albums = rest;
             try {
                 wx.setStorageSync( 'album', app.globalData.albums );

@@ -122,10 +122,17 @@ function deleteImageByFileID ( fileID ) {
     } )
 }
 
+function deleteImagesByFileID ( fileIDs ) {
+    return wx.cloud.deleteFile( {
+        fileList: fileIDs
+    } )
+}
+
 module.exports = {
     chooseImage,
     uploadImage,
     getImagesByFileID,
     getImageByFileID,
-    deleteImageByFileID
+    deleteImageByFileID,
+    deleteImagesByFileID
 }

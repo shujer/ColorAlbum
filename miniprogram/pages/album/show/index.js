@@ -35,7 +35,7 @@ Page( {
 
     this.eventsListener.photoAdd = app.events.on( 'photoAdd', ( { photo } ) => {
       console.log( '有图片添加：', photo )
-      if ( this.data.id === photo.albumID ) {
+      if ( this.data.id === photo.album._id ) {
         this.setData( {
           photos: [photo, ...this.data.photos]
         } )
@@ -92,9 +92,6 @@ Page( {
   },
 
   queryPhotos () {
-    this.setData( {
-      isLoading: true
-    } )
     photoApi.getPhotosByAlbumID( app.globalData.openid, this.data.id, this.data.pageSize, new Date() )
       .then( photos => {
         let fileList = []
@@ -178,6 +175,13 @@ Page( {
         console.error( '照片封面获取失败', err );
       } )
   },
+
+  toEdit: function () {
+    wx.navigateTo( {
+      url: `../../album/edit/index?id=${this.data.id}`,
+    } );
+  },
+
   toCreate: function () {
     app.globalData.selectedAlbum = this.data.album
     wx.navigateTo( {
@@ -189,6 +193,44 @@ Page( {
     let id = e.currentTarget.dataset.id;
     wx.navigateTo( {
       url: `../../photo/show/index?id=${id}`
+    } )
+  },
+
+  deleteAlbum: function () {
+    wx.showModal( {
+      title: '提示',
+      content: '删除相册后，相册内所有图片也会删除且无法恢复！确定删除吗？（删除可能花费几秒钟，请耐心等待）',
+      success: res => {
+        if ( res.confirm ) {
+          console.log( '用户点击确定' )
+          wx.showLoading( {
+            title: '删除中',
+            mask: true
+          } )
+          photoApi.getFileIDsByAlbumID( app.globalData.openid, this.data.id ).then( photos => {
+            let fileIDs = photos.map( photo => photo.fileID )
+            let deletePhotos = Promise.resolve( photoApi.deletePhotosByAlbumID( this.data.id ) )
+            let deleteAlbum = Promise.resolve( albumApi.deleteAlbum( this.data.id ) )
+            let deleteImages = Promise.resolve( imageApi.deleteImagesByFileID( fileIDs ) )
+            Promise.all([deleteAlbum, deletePhotos, deleteImages]).then(res => {
+              console.log(res)
+              wx.hideLoading()
+              app.emitDeleteAlbum({id: this.data.id})
+              wx.navigateBack({
+                delta: 1
+              })
+            }).catch(err => {
+              wx.showToast({
+                title: '删除失败',
+                icon: 'none'
+              })
+            })
+          } )
+
+        } else if ( res.cancel ) {
+          console.log( '用户点击取消' )
+        }
+      }
     } )
   }
 } )

@@ -4,6 +4,7 @@ const photoApi = require( '../../../api/photo' )
 const app = getApp()
 
 Page( {
+  eventsListener: {},
 
   /**
    * 页面的初始数据
@@ -23,22 +24,8 @@ Page( {
       { name: 'hex', value: 'hex' },
       { name: 'rgb', value: 'rgb' },
       { name: 'gray', value: 'gray' }
-    ]
-  },
-
-  onShow () {
-    let album = app.globalData.selectedAlbum;
-    if ( !album ) {
-      for ( let a in app.globalData.albums ) {
-        album = app.globalData.albums[a];
-        break;
-      }
-    }
-    if ( album ) {
-      this.setData( { album, hasAlbum: true } )
-    } else {
-      this.setData( { hasAlbum: false } )
-    }
+    ],
+    hasAlbum: false
   },
 
   onLoad () {
@@ -49,6 +36,22 @@ Page( {
       maxHeight: 810 / 750 * width,
       width
     } )
+
+    //监听相册选择
+    this.eventsListener.albumSelect = app.events.on( 'albumSelect', ( { album } ) => {
+      console.log( '有相册选择：', album )
+      this.setData( {
+        album: album,
+        hasAlbum: true
+      } )
+    } )
+  },
+
+  onUnload () {
+    //卸载监听函数
+    for ( let i in this.eventsListener ) {
+      app.events.remove( i, this.eventsListener[i] )
+    }
   },
 
   generatePalettes () {
@@ -183,7 +186,7 @@ Page( {
       let photo = {
         title: this.data.title,
         description: this.data.description,
-        albumID: this.data.album._id,
+        album: this.data.album,
         fileID: res.fileID,
         photoSettings: {
           borderWidth: this.data.borderWidth,

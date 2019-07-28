@@ -43,9 +43,13 @@ App( {
   emitAddAlbum ( data ) {
     this.events.emit( 'albumAdd', data )
   },
-  
+
   emitEditAlbum ( data ) {
     this.events.emit( 'albumEdit', data )
+  },
+
+  emitSelectAlbum ( data ) {
+    this.events.emit( 'albumSelect', data )
   }
 
 } )
