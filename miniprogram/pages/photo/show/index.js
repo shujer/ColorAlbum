@@ -4,12 +4,14 @@ const imageApi = require( '../../../api/image' )
 const photoApi = require( '../../../api/photo' )
 
 Page( {
+  eventsListener: {},
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    autoAnalyse: false,
+    timestamp: new Date().getTime()
   },
 
   /**
@@ -21,15 +23,38 @@ Page( {
       title: '加载中',
       mask: true
     } )
-    photoApi.getPhotoDetailById( id ).then( res => {
+    this.setData( { id }, () => {
+      this.queryPhoto()
+    } )
+    //监听图片修改
+    this.eventsListener.photoEdit = app.events.on( 'photoEdit', ( { photo } ) => {
+      console.log( '有图片修改：', photo )
+      if ( this.data.id === photo.id ) {
+        this.setData({
+          timestamp: new Date().getTime(),
+          ...this.data,
+          ...photo,
+          ...photo.photoSettings
+        })
+      }
+    } )
+  },
+  onUnload () {
+    //卸载监听函数
+    for ( let i in this.eventsListener ) {
+      app.events.remove( i, this.eventsListener[i] )
+    }
+  },
+
+  queryPhoto () {
+    photoApi.getPhotoDetailById( this.data.id ).then( res => {
       let { photoSettings, fileID, ...rest } = res
       imageApi.getImageByFileID( fileID ).then( res => {
         this.setData( {
           ...rest,
           ...photoSettings,
           fileID,
-          imagePath: res,
-          id
+          imagePath: res
         } )
       } ).catch( err => {
         console.log( err )

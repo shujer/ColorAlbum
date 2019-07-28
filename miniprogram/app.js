@@ -36,6 +36,10 @@ App( {
     this.events.emit( 'photoAdd', data )
   },
 
+  emitEditPhoto ( data ) {
+    this.events.emit( 'photoEdit', data )
+  },
+
   emitDeleteAlbum ( data ) {
     this.events.emit( 'albumDelete', data )
   },

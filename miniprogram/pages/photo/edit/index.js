@@ -159,7 +159,12 @@ Page( {
     } );
   },
 
-  uploadPhoto () {
+  updatePhoto () {
+    wx.showToast({
+      title: '功能尚未完善',
+      icon: 'none'
+    })
+    return;
     if ( !this.data.imagePath ) {
       wx.showToast( { title: '请先选择图片', icon: 'none' } )
       return;
@@ -168,5 +173,35 @@ Page( {
       wx.showToast( { title: '请先选择相册', icon: 'none' } )
       return;
     }
+    wx.showLoading( { title: '更新中' } )
+
+    let photo = {
+      id: this.data.id,
+      title: this.data.title,
+      description: this.data.description,
+      album: this.data.album,
+      photoSettings: {
+        borderWidth: this.data.borderWidth,
+        borderColor: this.data.borderColor,
+        num: this.data.palettes.length,
+        colorCodeStyle: this.data.colorCodeStyle
+      },
+      palettes: this.data.palettes,
+      due: new Date()
+    }
+    photoApi.editPhoto( this.data.id, photo ).then( res => {
+      console.log(res)
+      app.emitEditPhoto( { photo } )
+      wx.showToast( {
+        title: '更新成功',
+        success: res => {
+          wx.navigateBack( {
+            delta: 1
+          } );
+        }
+      } )
+    } ).catch( err => {
+      wx.showToast( { title: '更新失败', icon: 'none' } )
+    } )
   }
 } )

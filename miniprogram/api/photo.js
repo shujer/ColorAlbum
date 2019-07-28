@@ -62,8 +62,12 @@ function deletePhotosByAlbumID ( id ) {
 
 function editPhoto ( id, data ) {
     return new Promise( ( resolve, reject ) => {
-        db.collection( 'photo' ).doc( id ).update( { data } ).then( res => {
-            app.globalData.photos[id] = { ...app.globalData.photos[id], ...album };
+        let photo = {
+            ...data,
+            due: new Date()
+        }
+        db.collection( 'photo' ).doc( id ).update( { data: photo } ).then( res => {
+            app.globalData.photos[id] = { ...app.globalData.photos[id], ...photo };
             resolve( res );
         } ).catch( err => {
             console.error( '[数据库][add]调用失败', err );
