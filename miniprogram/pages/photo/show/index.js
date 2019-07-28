@@ -49,9 +49,13 @@ Page( {
   },
 
   toEdit () {
-    wx.navigateTo( {
-      url: `../edit/index?id=${this.data.id}`,
-    } );
+    wx.showToast({
+      title: '功能尚待完善',
+      icon: 'none'
+    })
+    // wx.navigateTo( {
+    //   url: `../edit/index?id=${this.data.id}`,
+    // } );
   },
 
   saveLocal () {

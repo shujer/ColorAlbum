@@ -1,7 +1,7 @@
 <!-- miniprogram/pages/tabar/my/index.wxml -->
 <view class="container">
     <view class="photowall">
-        <view wx:if="{{!isLoading}}" class="tile__create" bind:tap="toCreate" >
+        <view wx:if="{{hasLoaded}}" class="tile__create" bind:tap="toCreate" >
             <image class="tile__image" src="../../../assets/icons/add.png" mode="aspectFit"/>
         </view>
         <block wx:for="{{photos}}" wx:key="{{photo._id}}" wx:for-item="photo">

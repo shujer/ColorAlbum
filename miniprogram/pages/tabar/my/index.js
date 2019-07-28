@@ -102,8 +102,7 @@ Page( {
         if ( photos.length === 0 ) {
           setTimeout( () => {
             this.setData( {
-              isLoading: false,
-              hasNext: false
+              isLoading: false
             } )
           }, 500 );
         } else {
@@ -128,7 +127,11 @@ Page( {
           } )
         }
       } ).catch( err => {
-        wx.hideLoading()
+        setTimeout( () => {
+          this.setData( {
+            isLoading: false
+          } )
+        }, 500 );
         console.error( '照片封面获取失败', err );
       } )
   },

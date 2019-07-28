@@ -11,8 +11,11 @@ Page( {
    * 页面的初始数据
    */
   data: {
+    photos: [],
+    album: {},
     isLoading: true,
-    pageSize: 10,
+    hasLoaded: false,
+    pageSize: 5,
     pageNum: 0
   },
 
@@ -21,15 +24,31 @@ Page( {
    */
   onLoad: function ( options ) {
     //监听相册修改
-    this.eventsListener.albumAdd = app.events.on( 'albumEdit', ( { album } ) => {
+    this.eventsListener.albumEdit = app.events.on( 'albumEdit', ( { album } ) => {
       console.log( '有相册修改：', album )
       if ( this.data.id === album._id ) {
         this.setData( {
-          album: {...this.data.album, ...album}
+          album: { ...this.data.album, ...album }
         } )
       }
     } )
 
+    this.eventsListener.photoAdd = app.events.on( 'photoAdd', ( { photo } ) => {
+      console.log( '有图片添加：', photo )
+      if ( this.data.id === photo.albumID ) {
+        this.setData( {
+          photos: [photo, ...this.data.photos]
+        } )
+      }
+    } )
+
+    this.eventsListener.photoDelete = app.events.on( 'photoDelete', ( { id } ) => {
+      console.log( '有图片删除：', id )
+      let photos = this.data.photos.filter( photo => photo._id !== id );
+      this.setData( {
+        photos
+      } )
+    } )
     // 初始化
     let { id } = options;
     if ( !id ) {
@@ -89,7 +108,8 @@ Page( {
         } )
         setTimeout( () => {
           this.setData( {
-            isLoading: false
+            isLoading: false,
+            hasLoaded: true
           } )
         }, 300 )
         imageApi.getImagesByFileID( fileList ).then( res => {
@@ -104,6 +124,57 @@ Page( {
           console.error( '照片封面获取失败', err );
         } )
       } ).catch( err => {
+        console.error( '照片封面获取失败', err );
+      } )
+  },
+
+  onReachBottom () {
+    this.setData( {
+      isLoading: true
+    } )
+    let num = this.data.photos.length;
+    let date = num ? this.data.photos[num - 1].due : 0
+    photoApi.getPhotosByAlbumID( app.globalData.openid, this.data.id, this.data.pageSize, date )
+      .then( photos => {
+        let fileList = []
+        photos = photos.map( ( photo, index ) => {
+          fileList.push( { fileID: photo.fileID } )
+          return { ...photo, bgColor: genColor( index ) };
+        } )
+        let tempList = this.data.photos
+        if ( photos.length === 0 ) {
+          setTimeout( () => {
+            this.setData( {
+              isLoading: false
+            } )
+          }, 500 );
+        } else {
+          this.setData( {
+            photos: [...tempList, ...photos],
+            pageNum: this.data.pageNum + 1
+          } );
+          imageApi.getImagesByFileID( fileList ).then( res => {
+            photos = photos.map( ( photo, index ) => {
+              photo.tempFileURL = res[index].tempFileURL
+              return photo;
+            } )
+            this.setData( {
+              photos: [...tempList, ...photos],
+              isLoading: false
+            } )
+          } ).catch( err => {
+            this.setData( {
+              isLoading: false
+            } )
+            console.error( '照片封面获取失败', err );
+          } )
+        }
+      } ).catch( err => {
+        setTimeout( () => {
+          this.setData( {
+            isLoading: false
+          } )
+        }, 500 );
         console.error( '照片封面获取失败', err );
       } )
   },
