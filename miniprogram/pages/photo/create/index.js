@@ -106,7 +106,7 @@ Page( {
       this.setData( {
         animationData: animation
       } )
-    }, 1200 )
+    }, 1000 )
   },
 
   showPanel ( e ) {
@@ -171,7 +171,7 @@ Page( {
       wx.showToast( { title: '请先选择图片', icon: 'none' } )
       return;
     }
-    if ( !this.data.album ) {
+    if ( !this.data.album || !this.data.album._id ) {
       wx.showToast( { title: '请先选择相册', icon: 'none' } )
       return;
     }

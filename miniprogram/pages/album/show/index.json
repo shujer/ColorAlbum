@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "相册详情",
-  "usingComponents": {}
+  "usingComponents": {
+    "loading": "../../../components/loading/index"
+  }
 }

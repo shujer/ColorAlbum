@@ -1,2 +1,14 @@
-<!--miniprogram/pages/album/show/index.wxml-->
-<text>miniprogram/pages/album/show/index.wxml</text>
+<!-- miniprogram/pages/tabar/my/index.wxml -->
+<view class="container">
+    <view class="photowall">
+        <view wx:if="{{!isLoading}}" class="tile__create">
+            <image class="tile__image" src="../../../assets/icons/add.png" mode="aspectFit"/>
+        </view>
+        <block wx:for="{{photos}}" wx:key="{{photo._id}}" wx:for-item="photo">
+            <view class="tile" data-id="{{photo._id}}" bindtap="toPhoto" style="background-image: url({{photo.tempFileURL}}); background-color: {{photo.bgColor}}"></view>
+        </block>
+    </view>
+    <view wx:if="{{isLoading}}" class="loading-container">
+        <loading class="loading--spin" size="{{30}}"></loading>
+    </view>
+</view>

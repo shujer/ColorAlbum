@@ -83,10 +83,29 @@ function getPhotosByTime ( openid, limit = 10, due ) {
     } )
 }
 
+function getPhotosByAlbumID ( openid, albumID, limit = 10, due ) {
+    return new Promise( ( resolve, reject ) => {
+        const _ = db.command
+        db.collection( 'photo' )
+            .where( { _openid: openid, albumID: albumID, due: _.lt( due ) } )
+            .orderBy( 'due', 'desc' )
+            .limit( limit )
+            .get().then( ( { data } ) => {
+                let photos = transferArrayToObj( '_id', data );
+                app.globalData.photos = { ...app.globalData.photos, ...photos };
+                resolve( data );
+            } ).catch( err => {
+                console.error( '[数据库] [get] 调用失败', err )
+                reject( err )
+            } )
+    } )
+}
+
 module.exports = {
     getPhotosByTime,
     addPhoto,
     deletePhoto,
     editPhoto,
-    getPhotoDetailById
+    getPhotoDetailById,
+    getPhotosByAlbumID
 }

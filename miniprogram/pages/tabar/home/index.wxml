@@ -9,14 +9,14 @@
         <swiper autoplay="{{true}}">
             <block wx:for="{{albums}}" wx:key="{{item._id}}">
                 <swiper-item bind:tap="toAlbum" data-id="{{item._id}}">
-                    <view class="album" style="background-color: {{item.color}}; background-image: url({{item.coverImageURL}})">
+                    <view class="album" style="background-color: {{item.bgColor}}; background-image: url({{item.coverImageURL}})">
                         <text class="title">{{item.title}}</text>
                     </view>
                 </swiper-item>
             </block>
         </swiper>
     </view>
-    <cover-view class="create-btn" bind:tap="toCreate">
+    <cover-view wx:if="{{albums.length !== 0}}" class="create-btn" bind:tap="toCreate">
         <cover-image class="icon add-icon" src="../../../assets/icons/add.png"></cover-image>
     </cover-view>
 </view>

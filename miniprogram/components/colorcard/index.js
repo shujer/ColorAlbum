@@ -25,7 +25,7 @@ Component( {
                 this.draw()
                 setTimeout( () => {
                   this.startAnalyse().then( res => this.draw )
-                }, 1200 );
+                }, 1000 );
               } )
             },
             fail: err => {

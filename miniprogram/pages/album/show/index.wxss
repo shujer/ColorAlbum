@@ -1,1 +1,49 @@
 /* miniprogram/pages/album/show/index.wxss */
+/* miniprogram/pages/tabar/my/index.wxss */
+.container {
+    padding: 22rpx 22rpx 20rpx 22rpx;
+}
+
+.photowall {
+    width: 100%;
+    margin-top: 22rpx;
+    margin-bottom: 40rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: space-around;
+    flex-wrap: wrap;
+}
+
+.tile {
+    width: 345rpx;
+    height: 345rpx;
+    margin-bottom: 21rpx;
+    background-color: #FBE864;
+    background-position: center center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.tile__create {
+    width: 345rpx;
+    height: 345rpx;
+    margin-bottom: 21rpx;
+    background-color: rgba(255, 255, 255, .5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tile__image {
+    width: 50%;
+    height: 50%;
+}
+
+.loading-container {
+    height: 120rpx;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,2 +1,31 @@
-<!--miniprogram/pages/album/edit/index.wxml-->
-<text>miniprogram/pages/album/edit/index.wxml</text>
+<view class="container">
+    <view class="form">
+        <!-- title -->
+        <view class="section section_gap">
+            <text class="section__title">标题</text>
+            <view class="body-view">
+                <input bindinput="bindTitleInput" placeholder-style="color: #fff" value="{{title}}" />
+            </view>
+        </view>
+        <!-- description -->
+        <view class="section section_gap">
+            <text class="section__title">描述</text>
+            <view class="body-view">
+                <input bindinput="bindDescInput" placeholder-style="color: #fff" value="{{description}}" />
+            </view>
+        </view>
+        <!-- cover -->
+        <view class="section section_gap">
+            <text class="section__title">封面图片</text>
+            <view class="uploader" bind:tap="chooseImage">
+                <image wx:if="{{!hasCoverImage}}" class="upload-image" src="../../../assets/icons/pic.png" mode="aspectFit" lazy-load="false" />
+                <image  wx:if="{{hasCoverImage}}" class="preview-image" src="{{imagePath}}" mode="aspectFit" />
+            </view>
+        </view>
+    </view>
+    <view class="control-bar">
+        <view class="control-btn" bindtap="editAlbum">
+            保存
+        </view>
+    </view>
+</view>

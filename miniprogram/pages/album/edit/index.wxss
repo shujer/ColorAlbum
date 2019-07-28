@@ -1,1 +1,54 @@
-/* miniprogram/pages/album/edit/index.wxss */
+/* miniprogram/pages/album/create/index.wxss */
+.container {
+    padding-top: 40rpx;
+}
+
+.section {
+    width: 600rpx;
+    margin-bottom: 40rpx;
+    display: flex;
+    flex-direction: column;
+}
+
+.body-view {
+    margin-top: 10rpx;
+    width: 100%;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+.uploader {
+    width: 600rpx;
+    height: 600rpx;
+    border: 12rpx solid #fff;
+    margin-top: 10rpx;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-image {
+    width: 100%;
+    height: 100%;
+}
+
+.upload-image {
+    width: 200rpx;
+}
+
+.control-btn {
+    width: 200rpx;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    border: 10rpx solid #fff;
+    border-radius: 10rpx;
+    box-sizing: border-box;
+    -webkit-border-radius: 10rpx;
+    -moz-border-radius: 10rpx;
+    -ms-border-radius: 10rpx;
+    -o-border-radius: 10rpx;
+}

@@ -5,6 +5,7 @@ const imageApi = require( '../../../api/image' )
 const albumApi = require( '../../../api/album' )
 
 Page( {
+  eventsListener: {},
 
   /**
    * 页面的初始数据
@@ -13,20 +14,33 @@ Page( {
     albums: []
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onShow: function ( options ) {
+  onLoad () {
+    //监听相册删除
+    this.eventsListener.albumDelete = app.events.on( 'albumDelete', ( { id } ) => {
+      console.log( '有相册删除：', id )
+      let albums = this.data.albums.filter( album => album._id !== id );
+      this.setData( {
+        albums
+      } )
+    } )
+    //监听相册添加
+    this.eventsListener.albumAdd = app.events.on( 'albumAdd', ( { album } ) => {
+      console.log( '有相册添加：', album )
+      this.setData( {
+        albums: [album, ...this.data.albums]
+      } )
+    } )
+    // 初始化请求数据
     albumApi.getAlbumsByUser( app.globalData.openid ).then( albums => {
       let fileList = []
       albums = albums.map( ( album, index ) => {
-        fileList.push( album.coverImage )
-        return { ...album, color: genColor( index ) };
+        fileList.push(  {fileID: album.coverImage } )
+        return { ...album, bgColor: genColor( index ) };
       } )
       this.setData( {
         albums
       } )
-      imageApi.getImageByFileID( fileList ).then( res => {
+      imageApi.getImagesByFileID( fileList ).then( res => {
         albums = albums.map( ( album, index ) => {
           album.coverImageURL = res[index].tempFileURL
           return album;
@@ -39,19 +53,24 @@ Page( {
       } )
     } )
   },
-
-  selectAlbum(e) {
+  onUnload() {
+    //卸载监听函数
+    for (let i in this.eventsListener) {
+      app.events.remove(i, this.eventsListener[i])
+    } 
+  },
+  selectAlbum ( e ) {
     let index = e.currentTarget.dataset.index;
     app.globalData.selectedAlbum = this.data.albums[index]
-    wx.navigateBack({
+    wx.navigateBack( {
       delta: 1
-    });  
+    } );
   },
 
-  toAlbumCreate() {
-    wx.navigateTo({
+  toAlbumCreate () {
+    wx.navigateTo( {
       url: '../create/index',
-    });
-      
+    } );
+
   }
 } )

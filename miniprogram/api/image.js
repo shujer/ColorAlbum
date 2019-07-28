@@ -6,22 +6,15 @@ function chooseImage ( {
     sizeType = ['compressed'],
     sourceType = ['album', 'camera'] } = {} ) {
     return new Promise( ( resolve, reject ) => {
-        wx.showLoading( {
-            title: '请稍候',
-            mask: true
-        } );
-
         wx.chooseImage( {
             count,
             sizeType,
             sourceType,
             success: res => {
-                wx.hideLoading();
                 const tempFilePath = res.tempFilePaths[0]
                 resolve( tempFilePath )
             },
             fail: err => {
-                wx.hideLoading();
                 console.log( '[chooseImage]调用失败', err );
                 reject( err );
             }
@@ -58,6 +51,8 @@ function getImagesByFileID ( fileIDs ) {
             } else {
                 if ( fileIDs[index].fileID !== 'none' ) {
                     rest.push( index );
+                } else {
+                    result[index] = {tempFileURL: 'none', fileID: 'none'}
                 }
             }
         } )
@@ -84,6 +79,9 @@ function getImagesByFileID ( fileIDs ) {
 
 function getImageByFileID ( fileID ) {
     return new Promise( ( resolve, reject ) => {
+        if(fileID === 'none') {
+            resolve('none')
+        }
         let { tempFileURL } = app.globalData.tempFilePaths[fileID]
         if ( tempFileURL ) {
             if ( tempFileURL.includes( 'http://tmp' ) ) {

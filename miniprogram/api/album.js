@@ -2,18 +2,17 @@ const app = getApp();
 const db = wx.cloud.database();
 const { transferArrayToObj, transferObjToArray } = require( '../utils/transfer' );
 
-function addAlbum ( { title = '默认', description = '', isPrivate = '', coverImage = 'none' } ) {
+function addAlbum ( data ) {
     return new Promise( ( resolve, reject ) => {
+        let album = {
+            ...data,
+            due: new Date()
+        }
         db.collection( 'album' ).add( {
-            data: {
-                title,
-                description,
-                isPrivate,
-                coverImage
-            }
+            data: album
         } ).then( res => {
-            let { _id } = res;
-            app.globalData.albums[_id] = data;
+            let { _id } = res
+            app.globalData.albums = {...app.globalData.albums, [_id]: {_id, ...album }};
             try {
                 wx.setStorageSync( 'album', app.globalData.albums );
             } catch ( error ) {
@@ -29,8 +28,9 @@ function addAlbum ( { title = '默认', description = '', isPrivate = '', coverI
 
 function deleteAlbum ( id ) {
     return new Promise( ( resolve, reject ) => {
-        db.collection( 'album' ).doc(id ).remove().then( res => {
-            app.globalData.albums[id] = null;
+        db.collection( 'album' ).doc( id ).remove().then( res => {
+            let {id, ...rest} = app.globalData.albums;
+            app.globalData.albums = rest;
             try {
                 wx.setStorageSync( 'album', app.globalData.albums );
             } catch ( error ) {
@@ -46,8 +46,12 @@ function deleteAlbum ( id ) {
 
 function editAlbum ( id, data ) {
     return new Promise( ( resolve, reject ) => {
+        let album = {
+            ...data,
+            due: new Date()
+        }
         db.collection( 'album' ).doc( id ).update( { data } ).then( res => {
-            app.globalData.albums[id] = { ...app.globalData.albums[id], ...data };
+            app.globalData.albums[id] = { ...app.globalData.albums[id], ...album };
             try {
                 wx.setStorageSync( 'album', app.globalData.albums );
             } catch ( error ) {
@@ -55,9 +59,27 @@ function editAlbum ( id, data ) {
             }
             resolve( res );
         } ).catch( err => {
-            console.error( '[数据库][add]调用失败', err );
+            console.error( '[数据库][update]调用失败', err );
             reject( err );
         } )
+    } )
+}
+
+function getAlbumDetailById ( id ) {
+    return new Promise( ( resolve, reject ) => {
+        if ( app.globalData.albums[id] ) {
+            resolve( app.globalData.albums[id] )
+        } else {
+            db.collection( 'album' )
+                .doc( id )
+                .get().then( ( { data } ) => {
+                    app.globalData.albums[id] = data[0]
+                    resolve( data[0] )
+                } ).catch( err => {
+                    console.error( '[数据库] [get] 调用失败', err )
+                    reject( err )
+                } )
+        }
     } )
 }
 
@@ -70,7 +92,7 @@ function getAlbumsByUser ( openid ) {
 
         } else {
             app.globalData.albums = {}
-            // get data from local storage               
+            // get data from local storage   
             wx.getStorage( {
                 key: 'album',
                 success: res => {
@@ -82,6 +104,7 @@ function getAlbumsByUser ( openid ) {
                     console.error( '[getAlbum][getStorage]失败', err )
                     db.collection( 'album' )
                         .where( { _openid: openid } )
+                        .orderBy( 'due', 'desc' )
                         .get().then( ( { data } ) => {
                             let albums = transferArrayToObj( '_id', data );
                             app.globalData.albums = albums;
@@ -105,5 +128,6 @@ module.exports = {
     getAlbumsByUser,
     addAlbum,
     deleteAlbum,
-    editAlbum
+    editAlbum,
+    getAlbumDetailById
 }

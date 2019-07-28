@@ -7,9 +7,9 @@
             <text class="info">如果没有看到色块可点击重新生成</text>
         </view>
     </scroll-view>
-    <view class="create-btn" bind:tap="chooseImage" wx:if="{{!showPanel}}">
+    <cover-view class="create-btn" bind:tap="chooseImage" wx:if="{{!showPanel}}">
         <cover-image class="icon add-icon" src="../../../assets/icons/pic-camera_add.png"></cover-image>
-    </view>
+    </cover-view>
     <cover-view animation="{{animationData}}" class="control-panel">
         <cover-view class="panel-content">
             <cover-view class="section">

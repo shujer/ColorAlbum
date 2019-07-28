@@ -3,7 +3,7 @@
     <view class="album-container">
         <view class="album" wx:for="{{albums}}" wx:key="{{item._id}}" bind:tap="selectAlbum" data-index="{{index}}">
             <view class="title">{{item.title}}</view>
-            <view class="image" style="background-color: {{item.color}}; background-image: url({{item.coverImageURL}})"></view>
+            <view class="image" style="background-color: {{item.bgColor}}; background-image: url({{item.coverImageURL}})"></view>
         </view>
     </view>
     <view class="create-btn" bind:tap="toAlbumCreate">

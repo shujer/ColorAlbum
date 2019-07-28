@@ -1,66 +1,138 @@
-// miniprogram/pages/album/create/index.js
-Page({
+const app = getApp()
+const imageApi = require( '../../../api/image' )
+const albumApi = require( '../../../api/album' )
+
+Page( {
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    title: '',
+    description: '',
+    hasCoverImage: false
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  bindTitleInput ( e ) {
+    this.setData( {
+      title: e.detail.value
+    } )
+  },
+  bindDescInput ( e ) {
+    this.setData( {
+      description: e.detail.value
+    } )
+  },
+  chooseImage ( e ) {
+    imageApi.chooseImage().then( res => {
+      console.log( res )
+      this.setData( {
+        hasCoverImage: true,
+        imagePath: res
+      } )
+    } ).catch( err => {
+      wx.showToast( {
+        title: '选择失败',
+        icon: 'none'
+      } )
+      this.setData( {
+        hasCoverImage: false,
+        imagePath: null
+      } )
+    } )
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  addAlbum () {
+    let { title, description, imagePath } = this.data;
+    if ( title.trim() === '' ) {
+      wx.showToast( { title: '标题能不为空', icon: 'none' } )
+      return;
+    } else {
+      wx.showLoading( {
+        title: '创建中',
+        mask: true
+      } );
+      if ( !imagePath ) {
+        albumApi.addAlbum( {
+          title,
+          description,
+          coverImage: 'none'
+        } ).then( res => {
+          app.emitAddAlbum( {
+            album: {
+              _id: res._id,
+              title,
+              description,
+              coverImage: 'none'
+            }
+          } )
+          wx.showToast( {
+            title: '创建成功',
+            duration: 1200,
+            success: res => {
+              setTimeout( () => {
+                wx.navigateBack( {
+                  delta: 1
+                } );
+              }, 1200 );
+            },
+            fail: err => {
+              console.error( err )
+            }
+          } )
+        } ).catch( err => {
+          console.log( err )
+          wx.showToast( {
+            title: '创建失败',
+            icon: 'none'
+          } )
+        } )
+      } else {
+        imageApi.uploadImage( imagePath ).then( res => {
+          let { fileID } = res
+          albumApi.addAlbum( {
+            title,
+            description,
+            coverImage: fileID
+          } ).then( res => {
+            app.emitAddAlbum( {
+              album: {
+                _id: res._id,
+                title,
+                description,
+                coverImage: fileID,
+                coverImageURL: imagePath
+              }
+            } )
+            wx.showToast( {
+              title: '创建成功',
+              duration: 1200,
+              success: res => {
+                setTimeout( () => {
+                  wx.navigateBack( {
+                    delta: 1
+                  } );
+                }, 1200 );
+              },
+              fail: err => {
+                console.error( err )
+              }
+            } )
+          } ).catch( err => {
+            console.log( err )
+            wx.showToast( {
+              title: '创建失败',
+              icon: 'none'
+            } )
+          } )
+        } ).catch( err => {
+          console.log( err )
+          wx.showToast( {
+            title: '创建失败',
+            icon: 'none'
+          } )
+        } )
+      }
+    }
   }
-})
+} )
