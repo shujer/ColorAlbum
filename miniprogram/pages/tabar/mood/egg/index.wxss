@@ -1,7 +1,7 @@
 /* miniprogram/pages/tabar/mood/egg/index.wxss */
 
 .container {
-    padding: 120rpx 40rpx;
+    padding: 60rpx 40rpx;
 }
 
 .tip {
@@ -9,8 +9,12 @@
     line-height: 36px;
 }
 
+.section {
+    margin-top: 40rpx;
+}
+
 .section, .input {
     width: 100%;
     background-color: #fff;
-    color: black;
+    color:#333;
 }
