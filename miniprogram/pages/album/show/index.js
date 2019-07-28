@@ -25,8 +25,7 @@ Page( {
       console.log( '有相册修改：', album )
       if ( this.data.id === album._id ) {
         this.setData( {
-          ...this.data,
-          ...album
+          album: {...this.data.album, ...album}
         } )
       }
     } )
@@ -44,7 +43,7 @@ Page( {
     albumApi.getAlbumDetailById( id ).then( album => {
       this.setData( {
         id,
-        ...album
+        album
       }, () => {
         this.queryPhotos()
       } )
@@ -108,4 +107,17 @@ Page( {
         console.error( '照片封面获取失败', err );
       } )
   },
+  toCreate: function () {
+    app.globalData.selectedAlbum = this.data.album
+    wx.navigateTo( {
+      url: '../../photo/create/index',
+    } );
+  },
+
+  toPhoto: function ( e ) {
+    let id = e.currentTarget.dataset.id;
+    wx.navigateTo( {
+      url: `../../photo/show/index?id=${id}`
+    } )
+  }
 } )
