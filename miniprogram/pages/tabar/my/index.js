@@ -41,8 +41,10 @@ Page( {
     this.eventsListener.albumDelete = app.events.on( 'albumDelete', ( { id } ) => {
       console.log( '有相册删除：', id )
       let albums = this.data.albums.filter( album => album._id !== id );
+      let photos = this.data.photos.filter( photo => photo.album._id !== id)
       this.setData( {
-        albums
+        albums,
+        photos
       } )
     } )
     //监听相册添加
@@ -53,7 +55,7 @@ Page( {
       } )
     } )
     //监听相册修改
-    this.eventsListener.albumAdd = app.events.on( 'albumEdit', ( { album } ) => {
+    this.eventsListener.albumEdit = app.events.on( 'albumEdit', ( { album } ) => {
       console.log( '有相册修改：', album )
       let albums = this.data.albums.map(item => {
         if(item._id === album._id) {
@@ -74,6 +76,12 @@ Page( {
     for ( let i in this.eventsListener ) {
       app.events.remove( i, this.eventsListener[i] )
     }
+  },
+
+  onShow() {
+    this.setData({
+      current: 0//解决动态数组更新，swiper current不匹配导致的不显示问题
+    })
   },
 
   onPullDownRefresh () {

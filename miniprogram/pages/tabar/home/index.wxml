@@ -6,7 +6,7 @@
         <text>快来开始你的第一个创作吧</text>
     </view>
     <view class="album-container" wx:else>
-        <swiper autoplay="{{true}}">
+        <swiper autoplay="{{true}}" current="{{current}}">
             <block wx:for="{{albums}}" wx:key="{{item._id}}">
                 <swiper-item bind:tap="toAlbum" data-id="{{item._id}}">
                     <view class="album" style="background-color: {{item.bgColor}}; background-image: url({{item.coverImageURL}})">

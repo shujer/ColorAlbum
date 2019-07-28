@@ -1,6 +1,6 @@
 <!-- miniprogram/pages/tabar/my/index.wxml -->
 <view class="container">
-    <swiper class="swiper" indicator-dots autoplay indicator-active-color="{{indicatorActiveColor}}" indicator-color="{{indicatorColor}}">
+    <swiper class="swiper" current="{{current}}" indicator-dots autoplay indicator-active-color="{{indicatorActiveColor}}" indicator-color="{{indicatorColor}}">
         <block wx:for="{{albums}}" wx:key="{{item}}" wx:for-item="album">
             <swiper-item>
                 <view data-id="{{album._id}}" bindtap="toAlbum" class="slide" style="background-image: url({{album.coverImageURL}}); background-color: {{album.bgColor}}">
