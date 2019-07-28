@@ -1,12 +1,10 @@
 <!-- miniprogram/pages/photo/create/index.wxml -->
 <view class="container">
-    <scroll-view scroll-y="{{true}}" class="draw-container">
-        <color-card autoAnalyse="{{autoAnalyse}}" bind:setPalettes="setField" data-name="palettes" id="card" imagePath="{{imagePath}}" palettes="{{palettes}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
-        <view class="placehoder">
-            <text class="info">点击色块可查看颜色代码</text>
-            <text class="info">如果没有看到色块可点击重新生成</text>
-        </view>
-    </scroll-view>
+    <color-card autoAnalyse="{{autoAnalyse}}" bind:setPalettes="setField" data-name="palettes" id="card" imagePath="{{imagePath}}" palettes="{{palettes}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
+    <view class="placehoder">
+        <text class="info">点击色块可查看颜色代码</text>
+        <text class="info">如果没有看到色块可点击重新生成</text>
+    </view>
     <cover-view animation="{{animationData}}" class="control-panel">
         <cover-view class="panel-content">
             <cover-view class="section">
