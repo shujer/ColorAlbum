@@ -169,7 +169,6 @@ Page( {
 
   setField ( e ) {
     let name = e.currentTarget.dataset.name;
-    console.log(e)
     this.setData( { autoAnalyse: true, [name]: e.detail.value } )
   },
 

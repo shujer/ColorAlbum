@@ -33,7 +33,7 @@ Page( {
   },
 
   onShow () {
-    this.clear();
+    // this.clear();
   },
 
   onUnload () {
