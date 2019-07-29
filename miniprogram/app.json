@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/tabar/home/index",
     "pages/tabar/my/index",
     "pages/tabar/mood/index",
@@ -11,7 +10,8 @@
     "pages/album/edit/index",
     "pages/album/show/index",
     "pages/album/select/index",
-    "pages/tabar/mood/egg/index"
+    "pages/tabar/mood/egg/index",
+    "pages/photo/create/edit/index"
   ],
   "window": {
     "backgroundColor": "#9F8BE5",

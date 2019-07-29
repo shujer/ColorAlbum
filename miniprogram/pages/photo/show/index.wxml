@@ -1,7 +1,9 @@
 <!-- miniprogram/pages/photo/show/index.wxml -->
 <view class="container">
-    <color-card wx:key="{{timestamp}}" autoAnalyse="{{autoAnalyse}}" data-name="palettes" id="card" imagePath="{{imagePath}}" palettes="{{palettes}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
-    <view class="placehoder"></view>
+    <scroll-view scroll-y="{{true}}" class="scroll">
+        <color-card wx:key="{{timestamp}}" autoAnalyse="{{autoAnalyse}}" data-name="palettes" id="card" imagePath="{{imagePath}}" palettes="{{palettes}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
+        <view class="placehoder"></view>
+    </scroll-view>
     <cover-view class="tabbar">
         <cover-image bind:tap="toEdit" class="tab" src="../../../assets/icons/edit_white.png"></cover-image>
         <cover-image bind:tap="saveLocal" class="tab" src="../../../assets/icons/savelocal_white.png"></cover-image>

@@ -1,0 +1,44 @@
+<view class="container">
+    <scroll-view scroll-y="{{true}}" class="scroll">
+        <color-card bind:setPalettes="setField" autoAnalyse="{{autoAnalyse}}" data-name="palettes" id="card" imagePath="{{imagePath}}" palettes="{{palettes}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
+        <view wx:if="{{imagePath}}" class="placehoder">
+            <text class="info">点击色块可查看颜色代码</text>
+            <text class="info">如果没有看到色块可点击重新生成</text>
+        </view>
+    </scroll-view>
+    <cover-view class="header">
+        <image bind:tap="generatePalettes" class="icon" src="../../../../assets/icons/refresh.png"></image>
+    </cover-view>
+    <view class="control-bar">
+        <cover-view class="album-selector" bind:tap="toAlbumSelect">
+            <cover-view class="text">{{hasAlbum? album.title : '请选择一个相册'}}</cover-view>
+            <cover-image class="go-icon icon" src="../../../../assets/icons/arrow_white.png"></cover-image>
+        </cover-view>
+        <view class="tabbar">
+            <view class="tabbar-inner" animation="{{animationData}}">
+                <view class="tab" animation="{{titleData}}">
+                    <image bind:tap="changePanel" data-index="{{0}}" data-name="title" class="icon" src="../../../../assets/icons/title.png"></image>
+                    <view class="panel">
+                        <!-- <cover-input class="input" data-name="title" name="Title" value="{{title}}" bind:setTitle="setField"></cover-input> -->
+                    </view>
+                </view>
+                <view class="tab" animation="{{descriptionData}}">
+                    <image bind:tap="changePanel" data-index="{{1}}" data-name="description" class="icon" src="../../../../assets/icons/description.png"></image>
+                    <view class="panel"></view>
+                </view>
+                <view class="tab" animation="{{borderWidthData}}">
+                    <image bind:tap="changePanel" data-index="{{2}}" data-name="borderWidth" class="icon" src="../../../../assets/icons/scale.png"></image>
+                    <view class="panel"></view>
+                </view>
+                <view class="tab" animation="{{numData}}">
+                    <image bind:tap="changePanel" data-index="{{3}}" data-name="num" class="icon" src="../../../../assets/icons/numbers-fill.png"></image>
+                    <view class="panel"></view>
+                </view>
+                <view class="tab" animation="{{colorCodeStyleData}}">
+                    <image bind:tap="changePanel" data-index="{{4}}" data-name="colorCodeStyle" class="icon" src="../../../../assets/icons/font.png"></image>
+                    <view class="panel"></view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

@@ -1,72 +1,23 @@
-<!-- miniprogram/pages/photo/create/index.wxml -->
 <view class="container">
-    <scroll-view scroll-y="{{true}}" class="draw-container">
-        <color-card data-name="palettes" bind:setPalettes="setField" id="card" imagePath="{{imagePath}}" palettes="{{palettes}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
-        <view class="placehoder">
+    <scroll-view scroll-y="{{true}}" class="scroll">
+        <color-card bind:setPalettes="setField" autoAnalyse="{{true}}" data-name="palettes" id="card" imagePath="{{imagePath}}" palettes="{{palettes}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
+        <view wx:if="{{imagePath}}" class="placehoder">
             <text class="info">点击色块可查看颜色代码</text>
             <text class="info">如果没有看到色块可点击重新生成</text>
         </view>
     </scroll-view>
-    <cover-view class="create-btn" bind:tap="chooseImage" wx:if="{{!showPanel}}">
-        <cover-image class="icon add-icon" src="../../../assets/icons/pic-camera_add.png"></cover-image>
+    <cover-view class="header">
+        <cover-image bind:tap="generatePalettes" class="icon" src="../../../assets/icons/refresh.png"></cover-image>
     </cover-view>
-    <cover-view animation="{{animationData}}" class="control-panel">
-        <cover-view class="panel-content">
-            <cover-view class="section">
-                <cover-view class="choose-text" bind:tap="chooseImage">重新选择图片</cover-view>
-                <cover-view class="restart-text" bind:tap="generatePalettes">
-                    <cover-view>重新生成</cover-view>
-                    <cover-image class="rechoose-icon icon" src="../../../assets/icons/restart.png"></cover-image>
-                </cover-view>
-            </cover-view>
-            <cover-view class="section">
-                <cover-view class="section--title">标题</cover-view>
-                <cover-view class="section--body">
-                    <cover-input data-name="title" name="Title" value="{{title}}" bind:setTitle="setField"></cover-input>
-                </cover-view>
-            </cover-view>
-            <cover-view class="section">
-                <cover-view class="section--title">描述</cover-view>
-                <cover-view class="section--body">
-                    <cover-input data-name="description" name="Description" value="{{description}}" bind:setDescription="setField"></cover-input>
-                </cover-view>
-            </cover-view>
-            <cover-view class="section">
-                <cover-view class="section--title">轮廓宽度</cover-view>
-                <cover-view class="section--body">
-                    <cover-slider data-name="borderWidth" name="BorderWidth" value="{{borderWidth}}" bind:setBorderWidth="setField" blockSize="{{18}}" min="{{0}}" max="{{30}}"></cover-slider>
-                </cover-view>
-            </cover-view>
-            <cover-view class="section">
-                <cover-view class="section--title">色块数目</cover-view>
-                <cover-view class="section--body">
-                    <cover-slider data-name="num" name="Num" value="{{num}}" bind:setNum="setField" blockSize="{{18}}" min="{{1}}" max="{{16}}"></cover-slider>
-                </cover-view>
-            </cover-view>
-            <cover-view class="section">
-                <cover-view class="section--title">颜色代码</cover-view>
-                <cover-view class="section--body">
-                    <cover-radio name="Color" data-name="colorCodeStyle" bind:setColor="setField" groups="{{radios}}" value="{{colorCodeStyle}}"></cover-radio>
-                </cover-view>
-            </cover-view>
-            <cover-view class="section">
-                <cover-view class="section--title">相册</cover-view>
-                <cover-view class="section--body">
-                    <cover-view class="album-selector" bind:tap="toAlbumSelect">
-                        <cover-view class="text">{{hasAlbum? album.title : '请选择一个相册'}}</cover-view>
-                        <cover-image class="go-icon icon" src="../../../assets/icons/arrow.png"></cover-image>
-                    </cover-view>
-                </cover-view>
-            </cover-view>
-            <cover-view class="save-control">
-                <cover-view class="save-btn" bind:tap="savePhoto">
-                    <cover-image class="save-icon icon" src="../../../assets/icons/save_white.png"></cover-image>
-                </cover-view>
-            </cover-view>
+    <cover-view class="control-bar">
+        <cover-view class="album-selector" bind:tap="toAlbumSelect">
+            <cover-view class="text">{{hasAlbum? album.title : '请选择一个相册'}}</cover-view>
+            <cover-image class="go-icon icon" src="../../../assets/icons/arrow_white.png"></cover-image>
         </cover-view>
-        <cover-view class="border-control" bind:tap="editPhoto" data-status="{{openStatus}}">
-            <cover-image wx:if="{{!openStatus}}" src="../../../assets/icons/edit.png" class="edit-icon icon"></cover-image>
-            <cover-image wx:if="{{openStatus}}" src="../../../assets/icons/delete.png" class="delete-icon icon"></cover-image>
+        <cover-view class="tabbar">
+            <cover-image bind:tap="toEdit" class="tab icon" src="../../../assets/icons/edit_white.png"></cover-image>
+            <cover-image bind:tap="chooseImage" class="tab icon" src="../../../assets/icons/add.png"></cover-image>
+            <cover-image bind:tap="savePhoto" class="tab icon" src="../../../assets/icons/save_white.png"></cover-image>
         </cover-view>
     </cover-view>
 </view>

@@ -1,6 +1,6 @@
 // miniprogram/pages/photo/create/index.js
-const imageApi = require( '../../../api/image' )
-const photoApi = require( '../../../api/photo' )
+const imageApi = require( '../../../../api/image' )
+const photoApi = require( '../../../../api/photo' )
 const app = getApp()
 
 Page( {
@@ -18,7 +18,9 @@ Page( {
     num: 10,
     colorCodeStyle: 'hex',
     palettes: [],
-    hasAlbum: false
+    hasAlbum: false,
+    autoAnalyse: false,
+    expended: false
   },
 
   onLoad () {
@@ -30,6 +32,26 @@ Page( {
         hasAlbum: true
       } )
     } )
+
+    const systemInfo = wx.getSystemInfoSync()
+    const windowWidth = systemInfo.windowWidth;
+    const windowHeight = systemInfo.windowHeight;
+    this.setData( {
+      windowWidth,
+      windowHeight,
+      tabWidth: (150 / 750) * windowWidth
+    } )
+
+    if ( !app.globalData.tempPhoto ) {
+      wx.navigateBack( {
+        delta: 1
+      } );
+    } else {
+      this.setData( {
+        ...this.data,
+        ...app.globalData.tempPhoto
+      } )
+    }
   },
 
   onUnload () {
@@ -37,6 +59,80 @@ Page( {
     for ( let i in this.eventsListener ) {
       app.events.remove( i, this.eventsListener[i] )
     }
+  },
+
+  changePanel ( e ) {
+    if(this.data.expended) {
+      this.hidePanel(e) 
+    } else {
+      this.expendPanel(e)
+    }
+  },
+
+  expendPanel ( e ) {
+    let name = e.currentTarget.dataset.name;
+    let index = e.currentTarget.dataset.index;
+    var expendAnimation = wx.createAnimation( {
+      duration: 300,
+      timingFunction: "ease-in",
+      delay: 0
+    } );
+
+    var tabAnimation = wx.createAnimation( {
+      duration: 300,
+      timingFunction: "ease-in",
+      delay: 0
+    } );
+    this.expendAnimation = expendAnimation;
+    this[`${name}Data`] = tabAnimation;
+    expendAnimation.width( '750rpx' ).translateX( 0 ).step();
+    this[`${name}Data`].width( '150rpx' ).step();
+    this.setData( {
+      animationData: expendAnimation.export(),
+      [`${name}Data`]: this[`${name}Data`].export(),
+      expended: true
+    } )
+    setTimeout( () => {
+      expendAnimation.width( '1350rpx' ).translateX( - index * this.data.tabWidth ).step();
+      tabAnimation.width( '750rpx' ).step();
+      this.setData( {
+        animationData: expendAnimation,
+        [`${name}Data`]: tabAnimation
+      } )
+    }, 300 )
+  },
+
+  hidePanel ( e ) {
+    let name = e.currentTarget.dataset.name;
+    let index = e.currentTarget.dataset.index;
+    var hideAnimation = wx.createAnimation( {
+      duration: 300,
+      timingFunction: "ease-in",
+      delay: 0
+    } );
+
+    var tabAnimation = wx.createAnimation( {
+      duration: 300,
+      timingFunction: "ease-in",
+      delay: 0
+    } );
+    this.hideAnimation = hideAnimation;
+    this[`${name}Data`] = tabAnimation;
+    hideAnimation.width( '1350rpx' ).translateX( -index * this.data.tabWidth ).step();
+    this[`${name}Data`].width( '750rpx' ).step();
+    this.setData( {
+      animationData: hideAnimation.export(),
+      [`${name}Data`]: this[`${name}Data`].export(),
+      expended: false
+    } )
+    setTimeout( () => {
+      hideAnimation.width( '750rpx' ).translateX( 0 ).step();
+      this[`${name}Data`].width( '150rpx' ).step();
+      this.setData( {
+        animationData: hideAnimation,
+        [`${name}Data`]: this[`${name}Data`]
+      } )
+    }, 300 )
   },
 
   generatePalettes () {
@@ -63,25 +159,15 @@ Page( {
     } )
   },
 
-  toEdit () {
-    if ( !this.data.imagePath ) {
-      wx.showToast( { title: '请先选择图片', icon: 'none' } )
-      return;
-    }
-    app.globalData.tempPhoto = this.data;
-    wx.navigateTo( {
-      url: './edit/index?from=create'
-    } );
-  },
 
   setField ( e ) {
     let name = e.currentTarget.dataset.name;
-    this.setData( { [name]: e.detail.value } )
+    this.setData( { autoAnalyse: true, [name]: e.detail.value } )
   },
 
   toAlbumSelect () {
     wx.navigateTo( {
-      url: '../../album/select/index'
+      url: '../../../album/select/index'
     } );
   },
 
