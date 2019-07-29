@@ -1,16 +1,16 @@
+// miniprogram/pages/photo/create/index.js
 const imageApi = require( '../../../api/image' )
 const photoApi = require( '../../../api/photo' )
 const app = getApp()
 
 Page( {
   eventsListener: {},
+
   /**
    * 页面的初始数据
    */
   data: {
     imagePath: null,
-    showPanel: false,
-    openStatus: false,
     title: '',
     description: '',
     borderWidth: 0,
@@ -18,17 +18,17 @@ Page( {
     num: 10,
     colorCodeStyle: 'hex',
     palettes: [],
-    radios: [
-      { name: 'hex', value: 'hex' },
-      { name: 'rgb', value: 'rgb' },
-      { name: 'gray', value: 'gray' }
-    ],
+    hasAlbum: false,
     autoAnalyse: false,
-    album: {},
-    hasAlbum: false
+    expended: false,
+    colorTypes: [
+      { value: 'hex', name: 'hex', checked: true },
+      { value: 'rgb', name: 'rgb' },
+      { value: 'gray', name: 'gray' }
+    ]
   },
 
-  onLoad: function ( options ) {
+  onLoad ( options ) {
     let { id } = options;
     wx.showLoading( {
       title: '加载中',
@@ -43,7 +43,9 @@ Page( {
           fileID,
           imagePath: path,
           id,
-          hasAlbum: true
+          hasAlbum: true,
+          photo: res,
+          prevAlum: res.album
         } )
       } ).catch( err => {
         console.log( err )
@@ -59,22 +61,24 @@ Page( {
         icon: 'none'
       } )
     } )
-
-    const systemInfo = wx.getSystemInfoSync();
-    const width = systemInfo.windowWidth
-    this.setData( {
-      minHeight: 120 / 750 * width,
-      maxHeight: 810 / 750 * width,
-      width
-    } )
-
     //监听相册选择
     this.eventsListener.albumSelect = app.events.on( 'albumSelect', ( { album } ) => {
       console.log( '有相册选择：', album )
+      let prevAlum = this.data.album;
       this.setData( {
         album: album,
-        hasAlbum: true
+        hasAlbum: true,
+        prevAlum
       } )
+    } )
+
+    const systemInfo = wx.getSystemInfoSync()
+    const windowWidth = systemInfo.windowWidth;
+    const windowHeight = systemInfo.windowHeight;
+    this.setData( {
+      windowWidth,
+      windowHeight,
+      tabWidth: ( 150 / 750 ) * windowWidth
     } )
   },
 
@@ -85,72 +89,109 @@ Page( {
     }
   },
 
+  changePanel ( e ) {
+    if ( this.data.expended ) {
+      this.hidePanel( e )
+    } else {
+      this.expendPanel( e )
+    }
+  },
+
+  expendPanel ( e ) {
+    let name = e.currentTarget.dataset.name;
+    let index = e.currentTarget.dataset.index;
+    var expendAnimation = wx.createAnimation( {
+      duration: 300,
+      timingFunction: "ease-in",
+      delay: 0
+    } );
+
+    var tabAnimation = wx.createAnimation( {
+      duration: 300,
+      timingFunction: "ease-in",
+      delay: 0
+    } );
+    this.expendAnimation = expendAnimation;
+    this[`${name}Data`] = tabAnimation;
+    expendAnimation.width( '750rpx' ).translateX( 0 ).step();
+    this[`${name}Data`].width( '150rpx' ).step();
+    this.setData( {
+      animationData: expendAnimation.export(),
+      [`${name}Data`]: this[`${name}Data`].export(),
+      expended: true
+    } )
+    setTimeout( () => {
+      expendAnimation.width( '1350rpx' ).translateX( - index * this.data.tabWidth ).step();
+      tabAnimation.width( '750rpx' ).step();
+      this.setData( {
+        animationData: expendAnimation,
+        [`${name}Data`]: tabAnimation
+      } )
+    }, 300 )
+  },
+
+  hidePanel ( e ) {
+    let name = e.currentTarget.dataset.name;
+    let index = e.currentTarget.dataset.index;
+    var hideAnimation = wx.createAnimation( {
+      duration: 300,
+      timingFunction: "ease-in",
+      delay: 0
+    } );
+
+    var tabAnimation = wx.createAnimation( {
+      duration: 300,
+      timingFunction: "ease-in",
+      delay: 0
+    } );
+    this.hideAnimation = hideAnimation;
+    this[`${name}Data`] = tabAnimation;
+    hideAnimation.width( '1350rpx' ).translateX( -index * this.data.tabWidth ).step();
+    this[`${name}Data`].width( '750rpx' ).step();
+    this.setData( {
+      animationData: hideAnimation.export(),
+      [`${name}Data`]: this[`${name}Data`].export(),
+      expended: false
+    } )
+    setTimeout( () => {
+      hideAnimation.width( '750rpx' ).translateX( 0 ).step();
+      this[`${name}Data`].width( '150rpx' ).step();
+      this.setData( {
+        animationData: hideAnimation,
+        [`${name}Data`]: this[`${name}Data`]
+      } )
+    }, 300 )
+  },
+
   generatePalettes () {
-    this.hidePanel();
     this.selectComponent( '#card' ).startAnalyse()
   },
 
-  editPhoto () {
-    if ( this.data.openStatus ) {
-      this.hidePanel()
-    } else {
-      this.showPanel()
-    }
+  chooseImage: function () {
+    imageApi.chooseImage().then( res => {
+      wx.showToast( {
+        title: '选择成功',
+        icon: 'success',
+        success: ( result ) => {
+          this.setData( {
+            imagePath: res
+          } )
+        }
+      } );
+    } ).catch( err => {
+      console.error( '选择图片失败', err );
+      wx.showToast( {
+        title: '选择失败',
+        icon: 'none'
+      } )
+    } )
   },
 
-  showPanel ( e ) {
-    var animation = wx.createAnimation( {
-      duration: 250,
-      timingFunction: "ease-out",
-      delay: 0
-    } );
-    // 第一组动画
-    this.animation = animation;
-    animation.translateY( this.data.maxHeight ).step();
-    this.setData( {
-      animationData: animation.export()
-    } )
-    // 第二组动画
-    setTimeout( () => {
-      animation.translateY( this.data.minHeight ).step()
-      this.setData( {
-        animationData: animation,
-        openStatus: true
-      } )
-    }, 200 )
-  },
-
-  hidePanel () {
-    var animation = wx.createAnimation( {
-      duration: 250,
-      timingFunction: "ease-out",
-      delay: 0
-    } );
-    // 第一组动画
-    this.animation = animation;
-    animation.translateY( this.data.minHeight ).step();
-    this.setData( {
-      animationData: animation.export()
-    } )
-    // 第二组动画
-    setTimeout( () => {
-      animation.translateY( this.data.maxHeight ).step()
-      this.setData( {
-        animationData: animation,
-        openStatus: false
-      } )
-    }, 200 )
-  },
 
   setField ( e ) {
     let name = e.currentTarget.dataset.name;
-    if ( !this.data.autoAnalyse ) {
-      this.setData( { autoAnalyse: true }, () => {
-        this.setData( { [name]: e.detail.value } )
-      } )
-    } else {
-      this.setData( { [name]: e.detail.value } )
-    }
+    console.log( e )
+    this.setData( { autoAnalyse: true, [name]: e.detail.value } )
   },
 
   toAlbumSelect () {
@@ -159,49 +200,51 @@ Page( {
     } );
   },
 
-  updatePhoto () {
-    wx.showToast({
-      title: '功能尚未完善',
-      icon: 'none'
-    })
-    return;
-    if ( !this.data.imagePath ) {
-      wx.showToast( { title: '请先选择图片', icon: 'none' } )
-      return;
-    }
+  editPhoto () {
     if ( !this.data.album || !this.data.album._id ) {
       wx.showToast( { title: '请先选择相册', icon: 'none' } )
       return;
     }
-    wx.showLoading( { title: '更新中' } )
-
+    wx.showLoading( {
+      title: '更新中',
+      mask: true
+    } );
+    //
     let photo = {
-      id: this.data.id,
       title: this.data.title,
       description: this.data.description,
       album: this.data.album,
       photoSettings: {
         borderWidth: this.data.borderWidth,
         borderColor: this.data.borderColor,
-        num: this.data.palettes.length,
+        num: this.data.num,
         colorCodeStyle: this.data.colorCodeStyle
       },
       palettes: this.data.palettes,
       due: new Date()
     }
     photoApi.editPhoto( this.data.id, photo ).then( res => {
-      console.log(res)
-      app.emitEditPhoto( { photo } )
+      let { prevAlum, album } = this.data;
+      if ( prevAlum._id !== album._id ) {
+        app.emitSwitchAlbum( { prevAlum, curAlbum: album, photo: { _id: this.data.id, ...photo } } );
+      }
+      app.emitEditPhoto( { photo: { _id: this.data.id, ...photo } } );
       wx.showToast( {
         title: '更新成功',
+        icon: 'none',
         success: res => {
-          wx.navigateBack( {
-            delta: 1
-          } );
+          setTimeout( () => {
+            wx.navigateBack( {
+              delta: 2
+            } );
+          }, 1200 );
         }
       } )
     } ).catch( err => {
-      wx.showToast( { title: '更新失败', icon: 'none' } )
+      wx.showToast( {
+        title: '更新失败',
+        icon: 'none'
+      } )
     } )
   }
 } )

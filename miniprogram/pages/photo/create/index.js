@@ -32,6 +32,10 @@ Page( {
     } )
   },
 
+  onShow () {
+    this.clear();
+  },
+
   onUnload () {
     //卸载监听函数
     for ( let i in this.eventsListener ) {
@@ -40,6 +44,10 @@ Page( {
   },
 
   generatePalettes () {
+    if ( !this.data.imagePath ) {
+      wx.showToast( { title: '请先选择图片', icon: 'none' } )
+      return;
+    }
     this.selectComponent( '#card' ).startAnalyse()
   },
 
@@ -63,16 +71,33 @@ Page( {
     } )
   },
 
+  clear () {
+    this.selectComponent( '#card' ).clear();
+    this.setData( {
+      imagePath: null,
+      title: '',
+      description: '',
+      borderWidth: 0,
+      borderColor: '#fff',
+      num: 10,
+      colorCodeStyle: 'hex',
+      palettes: [],
+      hasAlbum: false
+    } )
+  },
+
   toEdit () {
     if ( !this.data.imagePath ) {
       wx.showToast( { title: '请先选择图片', icon: 'none' } )
       return;
     }
-    app.globalData.tempPhoto = this.data;
+    let { "__webviewId__": num, ...tempPhoto } = this.data
+    app.globalData.tempPhoto = tempPhoto;
     wx.navigateTo( {
       url: './edit/index?from=create'
     } );
   },
+
 
   setField ( e ) {
     let name = e.currentTarget.dataset.name;

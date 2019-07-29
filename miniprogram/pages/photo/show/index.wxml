@@ -4,9 +4,18 @@
         <color-card wx:key="{{timestamp}}" autoAnalyse="{{autoAnalyse}}" data-name="palettes" id="card" imagePath="{{imagePath}}" palettes="{{palettes}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
         <view class="placehoder"></view>
     </scroll-view>
-    <cover-view class="tabbar">
-        <cover-image bind:tap="toEdit" class="tab" src="../../../assets/icons/edit_white.png"></cover-image>
-        <cover-image bind:tap="saveLocal" class="tab" src="../../../assets/icons/savelocal_white.png"></cover-image>
-        <cover-image bind:tap="deletePhoto" class="tab" src="../../../assets/icons/delete_white.png"></cover-image>
+    <cover-view class="control-bar">
+        <cover-view class="info">
+            <cover-view class="title">{{title}}</cover-view>
+            <cover-view class="album-selector" bind:tap="toAlbum">
+                <cover-view class="text">{{album.title}}</cover-view>
+                <cover-image class="go-icon icon" src="../../../assets/icons/arrow_white.png"></cover-image>
+            </cover-view>
+        </cover-view>
+        <cover-view class="tabbar">
+            <cover-image bind:tap="toEdit" class="tab" src="../../../assets/icons/edit_white.png"></cover-image>
+            <cover-image bind:tap="saveLocal" class="tab" src="../../../assets/icons/savelocal_white.png"></cover-image>
+            <cover-image bind:tap="deletePhoto" class="tab" src="../../../assets/icons/delete_white.png"></cover-image>
+        </cover-view>
     </cover-view>
 </view>

@@ -28,14 +28,13 @@ Page( {
     } )
     //监听图片修改
     this.eventsListener.photoEdit = app.events.on( 'photoEdit', ( { photo } ) => {
-      console.log( '有图片修改：', photo )
-      if ( this.data.id === photo.id ) {
-        this.setData({
-          timestamp: new Date().getTime(),
+      if ( this.data.id === photo._id ) {
+        console.log( '有图片修改：', photo )
+        this.setData( {
           ...this.data,
           ...photo,
           ...photo.photoSettings
-        })
+        } )
       }
     } )
   },
@@ -74,13 +73,15 @@ Page( {
   },
 
   toEdit () {
-    wx.showToast({
-      title: '功能尚待完善',
-      icon: 'none'
-    })
-    // wx.navigateTo( {
-    //   url: `../edit/index?id=${this.data.id}`,
-    // } );
+    wx.navigateTo( {
+      url: `../edit/index?id=${this.data.id}`,
+    } );
+  },
+
+  toAlbum () {
+    wx.navigateTo( {
+      url: `../../album/show/index?id=${this.data.album._id}`,
+    } );
   },
 
   saveLocal () {

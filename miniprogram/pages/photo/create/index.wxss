@@ -38,6 +38,7 @@
     bottom: 0;
     width: 100%;
     height: 164rpx;
+    z-index: 999;
 }
 
 .album-selector {

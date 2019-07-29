@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/index/index",
     "pages/tabar/home/index",
     "pages/tabar/my/index",
     "pages/tabar/mood/index",

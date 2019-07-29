@@ -40,6 +40,10 @@ App( {
     this.events.emit( 'photoEdit', data )
   },
 
+  emitSwitchAlbum ( data ) {
+    this.events.emit( 'albumSwitch', data )
+  },
+
   emitDeleteAlbum ( data ) {
     this.events.emit( 'albumDelete', data )
   },

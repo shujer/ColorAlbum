@@ -68,9 +68,7 @@ Component( {
             this.setData( { palettes }, () => this.draw() )
           } )
         } else {
-
           this.draw();
-
         }
       }
     },
@@ -151,6 +149,13 @@ Component( {
    * 组件的方法列表
    */
   methods: {
+
+    clear() {
+      const ctx = wx.createCanvasContext( 'myCanvas', this );
+      ctx.clearRect( 0, 0, this.data.width, this.data.height);
+      ctx.draw();
+    },
+
     draw () {
       if ( !this.data.imagePath || !this.data.info ) {
         return;
@@ -200,10 +205,6 @@ Component( {
       }, () => {
         ctx.draw( false, () => {
           wx.hideLoading()
-          // wx.showToast( {
-          //   title: '绘制成功',
-          //   icon: 'success'
-          // } );
         } );
       } )
     },
@@ -275,6 +276,9 @@ Component( {
     },
 
     saveCardToPhotosAlbum () {
+      if(!this.data.imagePath) {
+        return;
+      }
       wx.showLoading( {
         title: '卡片生成中'
       } )

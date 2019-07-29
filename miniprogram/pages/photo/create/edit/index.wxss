@@ -19,6 +19,14 @@
     position: fixed;
     top: 20rpx;
     right: 20rpx;
+    height: 200rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.circle {
     width: 80rpx;
     height: 80rpx;
     border-radius: 50%;
@@ -38,6 +46,7 @@
     bottom: 0;
     width: 100%;
     height: 164rpx;
+    z-index: 999;
 }
 
 .album-selector {
@@ -62,7 +71,8 @@
     height: 50rpx;
 }
 
-.tabbar, .tabbar-inner {
+.tabbar,
+.tabbar-inner {
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -81,13 +91,14 @@
 }
 
 .tab .icon {
-    padding:  35rpx 50rpx;
+    padding: 35rpx 50rpx;
     flex-grow: 0;
     flex-shrink: 0;
 }
 
 .panel {
-    width: 600rpx;
+    width: 550rpx;
+    margin-left: 20rpx;
     flex-shrink: 0;
     flex-grow: auto;
 }
@@ -97,7 +108,10 @@
     color: #fff;
 }
 
-
+.radio-group {
+    display: flex;
+    justify-content: space-around;
+}
 
 .placehoder {
     height: 164rpx;

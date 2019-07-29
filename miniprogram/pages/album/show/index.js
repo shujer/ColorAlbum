@@ -25,17 +25,28 @@ Page( {
   onLoad: function ( options ) {
     //监听相册修改
     this.eventsListener.albumEdit = app.events.on( 'albumEdit', ( { album } ) => {
-      console.log( '有相册修改：', album )
       if ( this.data.id === album._id ) {
+        console.log( '有相册修改：', album )
         this.setData( {
           album: { ...this.data.album, ...album }
         } )
       }
     } )
 
+    this.eventsListener.albumSwitch = app.events.on( 'albumSwitch', ( { prevAlum, curAlbum, photo } ) => {
+      console.log( '有图片改变相册：' )
+      let photos = this.data.photos.filter( photo => photo._id !== photo._id )
+      if ( this.data.id === curAlbum._id ) {
+        photos = [photo, ...this.data.photos]
+      }
+      this.setData( {
+        photos
+      } )
+    } )
+
     this.eventsListener.photoAdd = app.events.on( 'photoAdd', ( { photo } ) => {
-      console.log( '有图片添加：', photo )
       if ( this.data.id === photo.album._id ) {
+        console.log( '有图片添加：', photo )
         this.setData( {
           photos: [photo, ...this.data.photos]
         } )
@@ -212,19 +223,19 @@ Page( {
             let deletePhotos = Promise.resolve( photoApi.deletePhotosByAlbumID( this.data.id ) )
             let deleteAlbum = Promise.resolve( albumApi.deleteAlbum( this.data.id ) )
             let deleteImages = Promise.resolve( imageApi.deleteImagesByFileID( fileIDs ) )
-            Promise.all([deleteAlbum, deletePhotos, deleteImages]).then(res => {
-              console.log(res)
+            Promise.all( [deleteAlbum, deletePhotos, deleteImages] ).then( res => {
+              console.log( res )
               wx.hideLoading()
-              app.emitDeleteAlbum({id: this.data.id})
-              wx.navigateBack({
+              app.emitDeleteAlbum( { id: this.data.id } )
+              wx.navigateBack( {
                 delta: 1
-              })
-            }).catch(err => {
-              wx.showToast({
+              } )
+            } ).catch( err => {
+              wx.showToast( {
                 title: '删除失败',
                 icon: 'none'
-              })
-            })
+              } )
+            } )
           } )
 
         } else if ( res.cancel ) {

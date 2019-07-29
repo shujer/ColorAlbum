@@ -1,9 +1,6 @@
 {
   "navigationBarTitleText": "编辑",
   "usingComponents": {
-    "color-card": "../../../../components/colorcard/index",
-    "cover-input": "../../../../components/coverinput/index",
-    "cover-slider": "../../../../components/coverslider/index",
-    "cover-radio": "../../../../components/coverradio/index"
+    "color-card": "../../../../components/colorcard/index"
   }
 }

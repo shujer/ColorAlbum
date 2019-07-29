@@ -20,7 +20,12 @@ Page( {
     palettes: [],
     hasAlbum: false,
     autoAnalyse: false,
-    expended: false
+    expended: false,
+    colorTypes: [
+      { value: 'hex', name: 'hex', checked: true },
+      { value: 'rgb', name: 'rgb' },
+      { value: 'gray', name: 'gray' }
+    ]
   },
 
   onLoad () {
@@ -39,7 +44,7 @@ Page( {
     this.setData( {
       windowWidth,
       windowHeight,
-      tabWidth: (150 / 750) * windowWidth
+      tabWidth: ( 150 / 750 ) * windowWidth
     } )
 
     if ( !app.globalData.tempPhoto ) {
@@ -55,6 +60,8 @@ Page( {
   },
 
   onUnload () {
+    let { "__webviewId__": num, ...tempPhoto } = this.data
+    app.globalData.tempPhoto = tempPhoto;
     //卸载监听函数
     for ( let i in this.eventsListener ) {
       app.events.remove( i, this.eventsListener[i] )
@@ -62,10 +69,10 @@ Page( {
   },
 
   changePanel ( e ) {
-    if(this.data.expended) {
-      this.hidePanel(e) 
+    if ( this.data.expended ) {
+      this.hidePanel( e )
     } else {
-      this.expendPanel(e)
+      this.expendPanel( e )
     }
   },
 
@@ -162,6 +169,7 @@ Page( {
 
   setField ( e ) {
     let name = e.currentTarget.dataset.name;
+    console.log(e)
     this.setData( { autoAnalyse: true, [name]: e.detail.value } )
   },
 
@@ -209,7 +217,7 @@ Page( {
           success: () => {
             setTimeout( () => {
               wx.redirectTo( {
-                url: `../show/index?id=${res._id}`
+                url: `../../show/index?id=${res._id}`
               } )
             }, 1200 )
           }
