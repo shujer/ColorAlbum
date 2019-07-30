@@ -226,7 +226,7 @@ Page( {
               wx.hideLoading()
               app.emitDeleteAlbum( { id: this.data.id } )
               wx.redirectTo({
-                url: '../../index/index'
+                url: '../../tabar/home/index'
               });
                 
             } ).catch( err => {
