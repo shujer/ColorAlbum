@@ -1,8 +1,6 @@
 // miniprogram/pages/album/select/index.js
 const app = getApp()
 const genColor = require( '../../../utils/genColor' )
-const imageApi = require( '../../../api/image' )
-const albumApi = require( '../../../api/album' )
 
 Page( {
   eventsListener: {},
@@ -31,7 +29,7 @@ Page( {
       } )
     } )
     // 初始化请求数据
-    albumApi.getAlbumsByUser( app.globalData.openid ).then( albums => {
+    app.globalApi.albumApi.getAlbumsByUser( app.globalData.openid ).then( albums => {
       let fileList = []
       albums = albums.map( ( album, index ) => {
         fileList.push(  {fileID: album.coverImage } )
@@ -40,7 +38,7 @@ Page( {
       this.setData( {
         albums
       } )
-      imageApi.getImagesByFileID( fileList ).then( res => {
+      app.globalApi.imageApi.getImagesByFileID( fileList ).then( res => {
         albums = albums.map( ( album, index ) => {
           album.coverImageURL = res[index].tempFileURL
           return album;

@@ -1,6 +1,4 @@
 // miniprogram/pages/photo/create/index.js
-const imageApi = require( '../../../api/image' )
-const photoApi = require( '../../../api/photo' )
 const app = getApp()
 
 Page( {
@@ -52,7 +50,7 @@ Page( {
   },
 
   chooseImage: function () {
-    imageApi.chooseImage().then( res => {
+    app.globalApi.imageApi.chooseImage().then( res => {
       wx.showToast( {
         title: '选择成功',
         icon: 'success',
@@ -123,7 +121,7 @@ Page( {
       title: '创建中',
       mask: true
     } );
-    imageApi.uploadImage( this.data.imagePath ).then( res => {
+    app.globalApi.imageApi.uploadImage( this.data.imagePath ).then( res => {
       let photo = {
         title: this.data.title,
         description: this.data.description,
@@ -138,7 +136,7 @@ Page( {
         palettes: this.data.palettes,
         due: new Date()
       }
-      photoApi.addPhoto( photo ).then( res => {
+      app.globalApi.photoApi.addPhoto( photo ).then( res => {
         app.emitAddPhoto( { photo: { ...photo, _id: res._id, tempFileURL: this.data.imagePath } } )
         wx.hideLoading();
         wx.showToast( {

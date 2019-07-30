@@ -1,8 +1,9 @@
 const Event = require( './utils/events' );
+
 //app.js
 App( {
   events: null,
-
+  globalApi: null,
   onLaunch: function () {
 
     if ( !wx.cloud ) {
@@ -19,7 +20,6 @@ App( {
       photos: {},
       tempFilePaths: {}
     }
-
     // 初始化事件
     this.initEvents()
   },

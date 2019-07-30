@@ -1,9 +1,6 @@
 // miniprogram/pages/album/show/index.js
 const app = getApp()
 const genColor = require( '../../../utils/genColor' )
-const imageApi = require( '../../../api/image' )
-const photoApi = require( '../../../api/photo' )
-const albumApi = require( '../../../api/album' )
 
 Page( {
   eventsListener: {},
@@ -70,7 +67,7 @@ Page( {
     wx.showLoading( {
       title: '加载中'
     } )
-    albumApi.getAlbumDetailById( id ).then( album => {
+    app.globalApi.albumApi.getAlbumDetailById( id ).then( album => {
       this.setData( {
         id,
         album
@@ -81,7 +78,7 @@ Page( {
         title: album.title
       } )
       if ( album.coverImage !== 'none' ) {
-        imageApi.getImageByFileID( album.coverImage ).then( res => {
+        app.globalApi.imageApi.getImageByFileID( album.coverImage ).then( res => {
           this.setData( {
             imagePath: res
           } )
@@ -103,7 +100,7 @@ Page( {
   },
 
   queryPhotos () {
-    photoApi.getPhotosByAlbumID( app.globalData.openid, this.data.id, this.data.pageSize, new Date() )
+    app.globalApi.photoApi.getPhotosByAlbumID( app.globalData.openid, this.data.id, this.data.pageSize, new Date() )
       .then( photos => {
         let fileList = []
         photos = photos.map( ( photo, index ) => {
@@ -120,7 +117,7 @@ Page( {
             hasLoaded: true
           } )
         }, 300 )
-        imageApi.getImagesByFileID( fileList ).then( res => {
+        app.globalApi.imageApi.getImagesByFileID( fileList ).then( res => {
           photos = photos.map( ( photo, index ) => {
             photo.tempFileURL = res[index].tempFileURL
             return photo;
@@ -142,7 +139,7 @@ Page( {
     } )
     let num = this.data.photos.length;
     let date = num ? this.data.photos[num - 1].due : 0
-    photoApi.getPhotosByAlbumID( app.globalData.openid, this.data.id, this.data.pageSize, date )
+    app.globalApi.photoApi.getPhotosByAlbumID( app.globalData.openid, this.data.id, this.data.pageSize, date )
       .then( photos => {
         let fileList = []
         photos = photos.map( ( photo, index ) => {
@@ -161,7 +158,7 @@ Page( {
             photos: [...tempList, ...photos],
             pageNum: this.data.pageNum + 1
           } );
-          imageApi.getImagesByFileID( fileList ).then( res => {
+          app.globalApi.imageApi.getImagesByFileID( fileList ).then( res => {
             photos = photos.map( ( photo, index ) => {
               photo.tempFileURL = res[index].tempFileURL
               return photo;
@@ -218,18 +215,20 @@ Page( {
             title: '删除中',
             mask: true
           } )
-          photoApi.getFileIDsByAlbumID( app.globalData.openid, this.data.id ).then( photos => {
+          app.globalApi.photoApi.getFileIDsByAlbumID( app.globalData.openid, this.data.id ).then( photos => {
             let fileIDs = photos.map( photo => photo.fileID )
-            let deletePhotos = Promise.resolve( photoApi.deletePhotosByAlbumID( this.data.id ) )
-            let deleteAlbum = Promise.resolve( albumApi.deleteAlbum( this.data.id ) )
-            let deleteImages = Promise.resolve( imageApi.deleteImagesByFileID( fileIDs ) )
+            if(this.data.album && this.data.album.coverImage !== 'none') fileIDs.push(this.data.album.coverImage)
+            let deletePhotos = Promise.resolve( app.globalApi.photoApi.deletePhotosByAlbumID( this.data.id ) )
+            let deleteAlbum = Promise.resolve( app.globalApi.albumApi.deleteAlbum( this.data.id ) )
+            let deleteImages = Promise.resolve( app.globalApi.imageApi.deleteImagesByFileID( fileIDs ) )
             Promise.all( [deleteAlbum, deletePhotos, deleteImages] ).then( res => {
               console.log( res )
               wx.hideLoading()
               app.emitDeleteAlbum( { id: this.data.id } )
-              wx.navigateBack( {
-                delta: 1
-              } )
+              wx.redirectTo({
+                url: '../../index/index'
+              });
+                
             } ).catch( err => {
               wx.showToast( {
                 title: '删除失败',

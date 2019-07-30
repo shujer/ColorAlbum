@@ -1,6 +1,4 @@
 const app = getApp()
-const imageApi = require( '../../../api/image' )
-const albumApi = require( '../../../api/album' )
 
 Page( {
 
@@ -25,13 +23,13 @@ Page( {
     wx.showLoading( {
       title: '加载中'
     } )
-    albumApi.getAlbumDetailById( id ).then( album => {
+    app.globalApi.albumApi.getAlbumDetailById( id ).then( album => {
       this.setData( {
         id,
         ...album
       } )
       if ( album.coverImage !== 'none' ) {
-        imageApi.getImageByFileID( album.coverImage ).then( res => {
+        app.globalApi.imageApi.getImageByFileID( album.coverImage ).then( res => {
           this.setData( {
             imagePath: res,
             hasCoverImage: true
@@ -58,7 +56,7 @@ Page( {
     } )
   },
   chooseImage ( e ) {
-    imageApi.chooseImage().then( res => {
+    app.globalApi.imageApi.chooseImage().then( res => {
       this.setData( {
         hasCoverImage: true,
         imagePath: res,
@@ -94,7 +92,7 @@ Page( {
           coverImage: hasChange ? 'none' : coverImage,
           coverImageURL: imagePath
         }
-        albumApi.editAlbum( this.data.id, album ).then( res => {
+        app.globalApi.albumApi.editAlbum( this.data.id, album ).then( res => {
           app.emitEditAlbum( {
             album: {
               _id: this.data.id,
@@ -123,7 +121,7 @@ Page( {
           } )
         } )
       } else {
-        imageApi.uploadImage( imagePath ).then( res => {
+        app.globalApi.imageApi.uploadImage( imagePath ).then( res => {
           let { fileID } = res
           let album = {
             title,
@@ -131,7 +129,7 @@ Page( {
             coverImage: fileID,
             coverImageURL: imagePath
           }
-          albumApi.editAlbum( this.data.id, album ).then( res => {
+          app.globalApi.albumApi.editAlbum( this.data.id, album ).then( res => {
             app.emitEditAlbum( {
               album: {
                 _id: this.data.id,

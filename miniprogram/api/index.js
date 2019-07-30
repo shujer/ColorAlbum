@@ -1,11 +1,9 @@
-const album = require('./album')
-const photo = require('./photo')
-const image = require('./image')
+const albumApi = require( './album' )
+const photoApi = require( './photo' )
+const imageApi = require( './image' )  
 
 module.exports = {
-    db: {
-        ...album,
-        ...photo
-    },
-    image
+    albumApi,
+    photoApi,
+    imageApi
 }

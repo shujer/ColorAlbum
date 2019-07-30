@@ -1,9 +1,6 @@
 // miniprogram/pages/tabar/my/index.js
 const app = getApp()
 const genColor = require( '../../../utils/genColor' )
-const imageApi = require( '../../../api/image' )
-const photoApi = require( '../../../api/photo' )
-const albumApi = require( '../../../api/album' )
 
 Page( {
   eventsListener: {},
@@ -99,7 +96,7 @@ Page( {
     } )
     let num = this.data.photos.length;
     let date = num ? this.data.photos[num - 1].due : 0
-    photoApi.getPhotosByTime( app.globalData.openid, this.data.pageSize, date )
+    app.globalApi.photoApi.getPhotosByTime( app.globalData.openid, this.data.pageSize, date )
       .then( photos => {
         let fileList = []
         photos = photos.map( ( photo, index ) => {
@@ -118,7 +115,7 @@ Page( {
             photos: [...tempList, ...photos],
             pageNum: this.data.pageNum + 1
           } );
-          imageApi.getImagesByFileID( fileList ).then( res => {
+          app.globalApi.imageApi.getImagesByFileID( fileList ).then( res => {
             photos = photos.map( ( photo, index ) => {
               photo.tempFileURL = res[index].tempFileURL
               return photo;
@@ -149,7 +146,7 @@ Page( {
       title: '加载中',
       mask: true
     } );
-    photoApi.getPhotosByTime( app.globalData.openid, this.data.pageSize, new Date() )
+    app.globalApi.photoApi.getPhotosByTime( app.globalData.openid, this.data.pageSize, new Date() )
       .then( photos => {
         let fileList = []
         photos = photos.map( ( photo, index ) => {
@@ -163,7 +160,7 @@ Page( {
         setTimeout( () => {
           wx.hideLoading()
         }, 300 )
-        imageApi.getImagesByFileID( fileList ).then( res => {
+        app.globalApi.imageApi.getImagesByFileID( fileList ).then( res => {
           photos = photos.map( ( photo, index ) => {
             photo.tempFileURL = res[index].tempFileURL
             return photo;
@@ -182,7 +179,7 @@ Page( {
   },
 
   queryAlbums () {
-    albumApi.getAlbumsByUser( app.globalData.openid ).then( albums => {
+    app.globalApi.albumApi.getAlbumsByUser( app.globalData.openid ).then( albums => {
       let fileList = []
       albums = albums.map( ( album, index ) => {
         fileList.push( { fileID: album.coverImage } )
@@ -191,7 +188,7 @@ Page( {
       this.setData( {
         albums
       } )
-      imageApi.getImagesByFileID( fileList ).then( res => {
+      app.globalApi.imageApi.getImagesByFileID( fileList ).then( res => {
         albums = albums.map( ( album, index ) => {
           album.coverImageURL = res[index].tempFileURL
           return album;

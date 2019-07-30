@@ -1,6 +1,4 @@
 // miniprogram/pages/photo/create/index.js
-const imageApi = require( '../../../api/image' )
-const photoApi = require( '../../../api/photo' )
 const app = getApp()
 
 Page( {
@@ -34,9 +32,9 @@ Page( {
       title: '加载中',
       mask: true
     } )
-    photoApi.getPhotoDetailById( id ).then( res => {
+    app.globalApi.photoApi.getPhotoDetailById( id ).then( res => {
       let { photoSettings, fileID, ...rest } = res
-      imageApi.getImageByFileID( fileID ).then( path => {
+      app.globalApi.imageApi.getImageByFileID( fileID ).then( path => {
         this.setData( {
           ...rest,
           ...photoSettings,
@@ -168,7 +166,7 @@ Page( {
   },
 
   chooseImage: function () {
-    imageApi.chooseImage().then( res => {
+    app.globalApi.imageApi.chooseImage().then( res => {
       wx.showToast( {
         title: '选择成功',
         icon: 'success',
@@ -222,7 +220,7 @@ Page( {
       palettes: this.data.palettes,
       due: new Date()
     }
-    photoApi.editPhoto( this.data.id, photo ).then( res => {
+    app.globalApi.photoApi.editPhoto( this.data.id, photo ).then( res => {
       let { prevAlum, album } = this.data;
       if ( prevAlum._id !== album._id ) {
         app.emitSwitchAlbum( { prevAlum, curAlbum: album, photo: { _id: this.data.id, ...photo } } );

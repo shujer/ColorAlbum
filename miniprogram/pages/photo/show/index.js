@@ -1,7 +1,5 @@
 // miniprogram/pages/photo/show/index.js
 const app = getApp()
-const imageApi = require( '../../../api/image' )
-const photoApi = require( '../../../api/photo' )
 
 Page( {
   eventsListener: {},
@@ -46,9 +44,9 @@ Page( {
   },
 
   queryPhoto () {
-    photoApi.getPhotoDetailById( this.data.id ).then( res => {
+    app.globalApi.photoApi.getPhotoDetailById( this.data.id ).then( res => {
       let { photoSettings, fileID, ...rest } = res
-      imageApi.getImageByFileID( fileID ).then( res => {
+      app.globalApi.imageApi.getImageByFileID( fileID ).then( res => {
         this.setData( {
           ...rest,
           ...photoSettings,
@@ -100,8 +98,8 @@ Page( {
             mask: true
           } )
           let { fileID, id } = this.data
-          photoApi.deletePhoto( id ).then( res => {
-            imageApi.deleteImageByFileID( fileID ).then( res => {
+          app.globalApi.photoApi.deletePhoto( id ).then( res => {
+            app.globalApi.imageApi.deleteImageByFileID( fileID ).then( res => {
               wx.showToast( {
                 title: '已删除',
                 mask: true,

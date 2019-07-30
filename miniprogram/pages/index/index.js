@@ -1,6 +1,6 @@
 //index.js
 const app = getApp()
-const { db } = require( '../../api/index' )
+const globalApi = require('../../api/index')
 
 Page( {
   data: {
@@ -21,10 +21,11 @@ Page( {
   onGetUserInfo: function ( e ) {
     if ( !this.logged && e.detail.userInfo ) {
       app.globalData.userInfo = e.detail.userInfo
+      app.globalApi = globalApi
       this.setData( { logged: true }, () => {
         this.getOpenid()
       } )
-    }
+    } 
   },
 
   getOpenid: function () {
@@ -40,7 +41,7 @@ Page( {
         console.log( '[云函数] [login] user openid: ', res.result.openid )
         app.globalData.openid = res.result.openid
         // 初始化相册数据
-        db.getAlbumsByUser( res.result.openid ).then( res => {
+        app.globalApi.albumApi.getAlbumsByUser( res.result.openid ).then( res => {
           wx.hideLoading();
           wx.switchTab({
             url: '../tabar/home/index'

@@ -1,6 +1,4 @@
 const app = getApp()
-const imageApi = require( '../../../api/image' )
-const albumApi = require( '../../../api/album' )
 
 Page( {
 
@@ -24,7 +22,7 @@ Page( {
     } )
   },
   chooseImage ( e ) {
-    imageApi.chooseImage().then( res => {
+    app.globalApi.imageApi.chooseImage().then( res => {
       console.log( res )
       this.setData( {
         hasCoverImage: true,
@@ -53,7 +51,7 @@ Page( {
         mask: true
       } );
       if ( !imagePath ) {
-        albumApi.addAlbum( {
+        app.globalApi.albumApi.addAlbum( {
           title,
           description,
           coverImage: 'none'
@@ -88,9 +86,9 @@ Page( {
           } )
         } )
       } else {
-        imageApi.uploadImage( imagePath ).then( res => {
+        app.globalApi.imageApi.uploadImage( imagePath ).then( res => {
           let { fileID } = res
-          albumApi.addAlbum( {
+          app.globalApi.albumApi.addAlbum( {
             title,
             description,
             coverImage: fileID

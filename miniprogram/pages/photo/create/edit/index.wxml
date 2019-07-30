@@ -37,13 +37,13 @@
                 <view class="tab" animation="{{borderWidthData}}">
                     <image bind:tap="changePanel" data-index="{{2}}" data-name="borderWidth" class="icon" src="../../../../assets/icons/scale.png"></image>
                     <view class="panel">
-                        <slider value="{{borderWidth}}" data-name="borderWidth" bindchange="setField" min="1" max="20" activeColor="#FBE864" block-size="12" />
+                        <slider value="{{borderWidth}}" data-name="borderWidth" bindchange="setField" min="1" max="30" activeColor="#FBE864" block-size="12" />
                     </view>
                 </view>
                 <view class="tab" animation="{{numData}}">
                     <image bind:tap="changePanel" data-index="{{3}}" data-name="num" class="icon" src="../../../../assets/icons/numbers-fill.png"></image>
                     <view class="panel">
-                        <slider value="{{num}}" data-name="num" bindchange="setField" step="1" min="1" max="16" activeColor="#FBE864" block-size="12" />
+                        <slider value="{{num}}" data-name="num" bindchange="setField" step="1" min="1" max="20" activeColor="#FBE864" block-size="12" />
                     </view>
                 </view>
                 <view class="tab" animation="{{colorCodeStyleData}}">
