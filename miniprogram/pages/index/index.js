@@ -1,6 +1,6 @@
 //index.js
 const app = getApp()
-const globalApi = require('../../api/index')
+const globalApi = require( '../../api/index' )
 
 Page( {
   data: {
@@ -25,7 +25,19 @@ Page( {
       this.setData( { logged: true }, () => {
         this.getOpenid()
       } )
-    } 
+    } else {
+      app.globalApi = globalApi
+      wx.navigateTo( {
+        url: '../demo/index'
+      } );
+    }
+  },
+
+  toDemo () {
+    app.globalApi = globalApi
+    wx.navigateTo( {
+      url: '../demo/index'
+    } );
   },
 
   getOpenid: function () {
@@ -43,9 +55,9 @@ Page( {
         // 初始化相册数据
         app.globalApi.albumApi.getAlbumsByUser( res.result.openid ).then( res => {
           wx.hideLoading();
-          wx.switchTab({
+          wx.switchTab( {
             url: '../tabar/home/index'
-          });
+          } );
         } ).catch( err => {
           console.error( '初始化失败', err )
         } )

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "体验版",
+  "usingComponents": {
+    "color-card": "../../components/colorcard/index"
+  }
+}

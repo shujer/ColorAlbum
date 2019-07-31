@@ -1,0 +1,61 @@
+<view class="container">
+    <scroll-view scroll-y="{{true}}" class="scroll">
+        <color-card bind:setPalettes="setField" autoAnalyse="{{true}}" data-name="palettes" id="card" imagePath="{{imagePath}}" palettes="{{palettes}}" borderWidth="{{borderWidth}}" borderColor="{{borderColor}}" num="{{num}}" colorCodeStyle="{{colorCodeStyle}}"></color-card>
+        <view wx:if="{{imagePath}}" class="placehoder">
+            <text class="info">点击色块可查看颜色代码</text>
+            <text class="info">长按可保存图片，使用更多功能请退出重新登录</text>
+        </view>
+    </scroll-view>
+    <cover-view class="header">
+        <cover-view class="circle" bind:tap="generatePalettes">
+            <cover-image class="icon" src="../../assets/icons/refresh.png"></cover-image>
+        </cover-view>
+        <cover-view class="circle" bind:tap="editPhoto">
+            <cover-image class="icon" src="../../assets/icons/save_white.png"></cover-image>
+        </cover-view>
+    </cover-view>
+    <view class="control-bar">
+        <cover-view class="add-button">
+            <cover-image bind:tap="chooseImage" class="icon" src="../../assets/icons/add.png"></cover-image>
+        </cover-view>
+        <view class="tabbar">
+            <view class="tabbar-inner" animation="{{animationData}}">
+                <view class="tab" animation="{{titleData}}">
+                    <image bind:tap="changePanel" data-index="{{0}}" data-name="title" class="icon" src="../../assets/icons/title.png"></image>
+                    <view class="panel">
+                        <input class="input" data-name="title" value="{{title}}" bindinput="setField"></input>
+                    </view>
+                </view>
+                <view class="tab" animation="{{descriptionData}}">
+                    <image bind:tap="changePanel" data-index="{{1}}" data-name="description" class="icon" src="../../assets/icons/description.png"></image>
+                    <view class="panel">
+                        <input class="input" data-name="description" value="{{description}}" bindinput="setField"></input>
+                    </view>
+                </view>
+                <view class="tab" animation="{{borderWidthData}}">
+                    <image bind:tap="changePanel" data-index="{{2}}" data-name="borderWidth" class="icon" src="../../assets/icons/scale.png"></image>
+                    <view class="panel">
+                        <slider value="{{borderWidth}}" data-name="borderWidth" bindchange="setField" min="1" max="30" activeColor="#FBE864" block-size="12" />
+                    </view>
+                </view>
+                <view class="tab" animation="{{numData}}">
+                    <image bind:tap="changePanel" data-index="{{3}}" data-name="num" class="icon" src="../../assets/icons/numbers-fill.png"></image>
+                    <view class="panel">
+                        <slider value="{{num}}" data-name="num" bindchange="setField" step="1" min="1" max="20" activeColor="#FBE864" block-size="12" value="{{num}}" />
+                    </view>
+                </view>
+                <view class="tab" animation="{{colorCodeStyleData}}">
+                    <image bind:tap="changePanel" data-index="{{4}}" data-name="colorCodeStyle" class="icon" src="../../assets/icons/font.png"></image>
+                    <view class="panel">
+                        <radio-group class="radio-group" bindchange="setField" data-name="colorCodeStyle">
+                            <label class="radio" wx:for="{{colorTypes}}" wx:key="{{item.value}}">
+                                <radio value="{{item.value}}" checked="{{item.value === colorCodeStyle}}" color="#FBE864" />
+                                {{item.name}}
+                            </label>
+                        </radio-group>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

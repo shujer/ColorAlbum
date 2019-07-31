@@ -12,7 +12,8 @@
     "pages/album/show/index",
     "pages/album/select/index",
     "pages/tabar/mood/egg/index",
-    "pages/photo/create/edit/index"
+    "pages/photo/create/edit/index",
+    "pages/demo/index"
   ],
   "window": {
     "backgroundColor": "#9F8BE5",

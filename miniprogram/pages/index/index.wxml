@@ -8,4 +8,8 @@
   <button class="login-btn" wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">
     使用微信账号登录
   </button>
+  <text class="info" bind:tap="toDemo">
+    不登录使用体验版
+  </text>
+    
 </view>

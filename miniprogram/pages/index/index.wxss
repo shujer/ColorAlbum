@@ -30,3 +30,8 @@
   color: #FBE864;
   font-size: 17px;
 }
+
+.info {
+  margin-top: 10rpx;
+  font-size: 14px;
+}
