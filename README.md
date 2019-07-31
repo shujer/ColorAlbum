@@ -3,5 +3,6 @@
 ## 效果
 ![home](/doc/GIF.gif)
 ![edit](/doc/GIF2.gif)
+![QT](/doc/search.png)
 
 
